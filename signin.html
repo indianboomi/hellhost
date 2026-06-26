@@ -1,20 +1,33 @@
 <form id="signupForm">
-    <input type="text" id="username" placeholder="Username" required>
 
-    <input type="email" id="email" placeholder="Email" required>
+<input
+type="email"
+id="email"
+placeholder="Email"
+required>
 
-    <input type="password" id="password" placeholder="Password" required>
+<input
+type="password"
+id="password"
+placeholder="Password"
+required>
 
-    <button type="submit">Create Account</button>
+<button>Create Account</button>
+
 </form>
 
 <hr>
 
-<button>Continue with Discord</button>
-<button>Continue with Google</button>
-<button>Continue with GitHub</button>
+<button onclick="googleLogin()">
 
-<p>
-Already have an account?
-<a href="login.html">Login</a>
-</p>
+Continue with Google
+
+</button>
+
+<button onclick="githubLogin()">
+
+Continue with GitHub
+
+</button>
+
+<script type="module" src="js/auth.js"></script>
