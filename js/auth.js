@@ -13,20 +13,19 @@ onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-
-apiKey:"AIzaSyCQhjd3TkMLEhX_UuBQMN_us5yjV3igg-Y",
-
-authDomain:"hellhost-c199c.firebaseapp.com",
-
-projectId:"hellhost-c199c",
-
-storageBucket:"hellhost-c199c.firebasestorage.app",
-
-messagingSenderId:"812756184123",
-
-appId:"1:812756184123:web:7474904a05c10f3fdf801e"
-
-measurementId: "G-2GVC29QMLM"
+  apiKey: "AIzaSyCQhjd3TkMLEhX_UuBQMN_us5yjV3igg-Y",
+  
+  authDomain: "hellhost-c199c.firebaseapp.com",
+  
+  projectId: "hellhost-c199c",
+  
+  storageBucket: "hellhost-c199c.firebasestorage.app",
+  
+  messagingSenderId: "812756184123",
+  
+  appId: "1:812756184123:web:b5fd3658b6692e62df801e",
+  
+  measurementId: "G-PXJKVH5DHL"
 
 };
 
