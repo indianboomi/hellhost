@@ -18,6 +18,16 @@ body {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-top: 10px;
+}
+
 button {
     width: 100%;
     padding: 15px;
@@ -30,17 +40,17 @@ button {
 }
 
 .discord {
-    background-color: #5865f2;
+    background-color: #5865f2; /* Discord Blue */
     color: white;
 }
 
 .google {
-    background-color: #ffffff;
+    background-color: #ffffff; /* White for Google */
     color: black;
 }
 
 .github {
-    background-color: #333;
+    background-color: #333; /* Black for GitHub */
     color: white;
 }
 
