@@ -17,9 +17,17 @@ const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 
 onAuthStateChanged(auth,user=>{
+const user = JSON.parse(localStorage.getItem("discordUser"));
 
-if(!user){
+if(user){
 
+document.getElementById("username").innerText =
+user.global_name || user.username;
+
+document.getElementById("avatar").src =
+`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+
+}
 window.location="login.html";
 
 }
