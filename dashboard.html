@@ -1,22 +1,32 @@
-<<h1>Dashboard</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hell Host Dashboard</title>
 
-<button onclick="logout()">
+    <link rel="stylesheet" href="css/style.css">
+</head>
 
-Logout
+<body>
 
-</button>
+<div class="dashboard">
 
-<h2 id="username"></h2>
+    <h1>🔥 Hell Host</h1>
 
-<img id="avatar" width="120">
+    <img id="avatar" width="120" height="120" style="border-radius:50%;">
 
-<script type="module" src="js/dashboard.js"></script>
-</button>
+    <h2 id="username">{user}</h2>
+
+    <p id="email"></p>
+
+    <button onclick="logout()">
+        Logout
+    </button>
 
 </div>
 
 <script src="js/dashboard.js"></script>
 
 </body>
-
 </html>
