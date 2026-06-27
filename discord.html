@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Discord Login</title>
+</head>
+<body>
+
+<h2>Signing you in...</h2>
+
+<script>
+const params = new URLSearchParams(location.search);
+
+const user = JSON.parse(params.get("user"));
+
+localStorage.setItem("discordUser", JSON.stringify(user));
+
+window.location = "dashboard.html";
+</script>
+
+</body>
+</html>
