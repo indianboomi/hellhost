@@ -101,6 +101,13 @@ window.location="dashboard.html";
 
 }
 
+function discordLogin() {
+  
+    window.location.href =
+      
+    "https://hellhost-auth.indianboomi157.workers.dev/login";
+}
+
 // LOGIN CHECK
 
 onAuthStateChanged(auth,(user)=>{
