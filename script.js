@@ -1,9 +1,14 @@
 function authLinks(){
   const logged=localStorage.getItem('hellhost_user');
   document.querySelectorAll('.auth-links').forEach(el=>{
-    el.innerHTML=logged
-      ? '<a href="#" onclick="logout(event)">Logout</a>'
-      : '<a href="index.html">Home</a><a href="login.html">Login</a>';
+    if(logged){
+      const email=logged;
+      const initial=(email.charAt(0)||'U').toUpperCase();
+      const name=email.split('@')[0];
+      el.innerHTML='<a class="user-nav" href="dashboard.html" title="Open Panel"><span class="user-avatar">'+initial+'</span><span class="user-name-nav">'+name+'</span></a><a class="logout-nav" href="#" onclick="logout(event)">Logout</a>';
+    }else{
+      el.innerHTML='<a class="home-nav" href="index.html">Home</a><a class="login-nav" href="login.html">Login</a>';
+    }
   });
 }
 function logout(e){
