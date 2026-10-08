@@ -3,8 +3,11 @@ function authLinks(){
   document.querySelectorAll('.auth-menu').forEach(el=>{
     el.innerHTML=logged
       ? '<a class="user-link" href="dashboard.html"><span class="user-icon">👤</span> '+escapeHtml(logged.split('@')[0])+'</a><a class="logout-link" href="#" onclick="logout(event)">Logout</a>'
-      : '<a href="login.html">Login</a>';
+      : '<button class="oauth-link google" type="button" onclick="oauthLogin("google")">🔵 Login with Google</button><button class="oauth-link github" type="button" onclick="oauthLogin("github")">⚫ Login with GitHub</button><button class="oauth-link discord" type="button" onclick="oauthLogin("discord")">💬 Login with Discord</button>';
   });
+}
+function oauthLogin(provider){
+  alert('Hell Host '+provider+' login needs OAuth credentials to be connected. The button is ready for the real provider setup.');
 }
 function escapeHtml(value){
   return value.replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
