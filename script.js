@@ -2,8 +2,8 @@ function authLinks(){
   const logged=localStorage.getItem('hellhost_user');
   document.querySelectorAll('.auth-links').forEach(el=>{
     el.innerHTML=logged
-      ? '<a href="dashboard.html">Panel</a><a href="#" onclick="logout(event)">Logout</a>'
-      : '<a href="login.html">Login</a>';
+      ? '<a href="#" onclick="logout(event)">Logout</a>'
+      : '<a href="index.html">Home</a><a href="login.html">Login</a>';
   });
 }
 function logout(e){
