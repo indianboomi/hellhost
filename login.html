@@ -1,24 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — Hell Host</title><link rel="stylesheet" href="style.css">
-</head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Login — Hell Host</title><link rel="stylesheet" href="style.css"></head>
 <body>
-<header class="nav-wrap"><nav class="nav container">
-<a class="brand" href="index.html"><span class="brand-mark">H</span><span>Hell<span>Host</span></span></a>
-<div class="nav-links"><button class="menu-trigger" type="button" id="menu-trigger" aria-label="Open menu" aria-expanded="false">☰</button><div class="site-menu" id="site-menu"><a href="index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a><span class="auth-menu"><a href="login.html">Login</a></span></div></div>
-</nav></header>
-<main class="auth-page"><section class="auth-card oauth-card">
-<div class="eyebrow">WELCOME TO HELL HOST</div>
-<h1>Login to <span>Hell Host</span></h1>
-<p class="muted">Choose your account provider to continue to the panel.</p>
+<header class="nav-wrap"><nav class="nav container"><a class="brand" href="index.html"><span class="brand-mark">H</span><span>Hell<span>Host</span></span></a></nav></header>
+<main class="auth-page"><section class="auth-card">
+<div class="eyebrow">WELCOME TO HELL HOST</div><h1>Login to <span>Hell Host</span></h1>
+<p class="muted">Login with your Hell Host account or continue with a provider.</p>
+<form onsubmit="login(event)">
+<label>Email<input id="email" type="email" placeholder="you@example.com" required></label>
+<label>Password<input id="password" type="password" placeholder="Your password" required></label>
+<button class="btn primary full" type="submit">Login →</button>
+</form>
+<div class="divider"><span>OR</span></div>
 <div class="oauth-buttons">
-<button class="oauth-btn google" onclick="startOAuth('Google')"><span class="oauth-logo">G</span>Continue with Google</button>
-<button class="oauth-btn github" onclick="startOAuth('GitHub')"><span class="oauth-logo">●</span>Continue with GitHub</button>
-<button class="oauth-btn discord" onclick="startOAuth('Discord')"><span class="oauth-logo">◉</span>Continue with Discord</button>
+<button class="oauth-btn google" type="button" onclick="startOAuth('Google')"><span class="oauth-logo">G</span>Continue with Google</button>
+<button class="oauth-btn github" type="button" onclick="startOAuth('GitHub')"><span class="oauth-logo">●</span>Continue with GitHub</button>
+<button class="oauth-btn discord" type="button" onclick="startOAuth('Discord')"><span class="oauth-logo">◈</span>Continue with Discord</button>
 </div>
+<p class="signup">Don't have an account? <a href="signup.html">Create New Account</a></p>
 <p id="login-message"></p>
-<p class="oauth-note">Secure OAuth login. No Hell Host password is required.</p>
-</section></main>
-<script src="script.js"></script></body></html>
+</section></main><script src="script.js"></script></body></html>
