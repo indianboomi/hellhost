@@ -1,15 +1,13 @@
 function authLinks(){
   const logged=localStorage.getItem('hellhost_user');
-  document.querySelectorAll('.auth-links').forEach(el=>{
-    if(logged){
-      const email=logged;
-      const initial=(email.charAt(0)||'U').toUpperCase();
-      const name=email.split('@')[0];
-      el.innerHTML='<a class="user-nav" href="dashboard.html" title="Open Panel"><span class="user-avatar">'+initial+'</span><span class="user-name-nav">'+name+'</span></a><a class="logout-nav" href="#" onclick="logout(event)">Logout</a>';
-    }else{
-      el.innerHTML='<a class="home-nav" href="index.html">Home</a><a class="login-nav" href="login.html">Login</a>';
-    }
+  document.querySelectorAll('.auth-menu').forEach(el=>{
+    el.innerHTML=logged
+      ? '<a class="user-link" href="dashboard.html"><span class="user-icon">👤</span> '+escapeHtml(logged.split('@')[0])+'</a><a class="logout-link" href="#" onclick="logout(event)">Logout</a>'
+      : '<a href="login.html">Login</a>';
   });
+}
+function escapeHtml(value){
+  return value.replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
 }
 function logout(e){
   if(e)e.preventDefault();
@@ -44,7 +42,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const trigger=document.getElementById('menu-trigger');
   const menu=document.getElementById('site-menu');
   if(trigger&&menu){
-    trigger.addEventListener('click',(e)=>{
+    trigger.addEventListener('click',e=>{
       e.stopPropagation();
       const open=menu.classList.toggle('show');
       trigger.setAttribute('aria-expanded',String(open));
