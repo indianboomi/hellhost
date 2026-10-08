@@ -1,0 +1,7 @@
+function authLinks(){const logged=localStorage.getItem('hellhost_user');document.querySelectorAll('.auth-links').forEach(el=>{el.innerHTML=logged?'<a href="dashboard.html">Dashboard</a><a href="#" onclick="logout(event)">Logout</a>':'<a href="login.html">Login</a>'})}
+function logout(e){if(e)e.preventDefault();localStorage.removeItem('hellhost_user');location.href='index.html'}
+function login(e){e.preventDefault();const email=document.getElementById('email').value;localStorage.setItem('hellhost_user',email);location.href='dashboard.html'}
+function demoSignup(e){e.preventDefault();const email=prompt('Enter your email to create a demo account:');if(email){localStorage.setItem('hellhost_user',email);location.href='dashboard.html'}}
+function copyIP(){navigator.clipboard?.writeText('play.hellhost.in');alert('Server IP copied!')}
+function sendContact(e){e.preventDefault();document.getElementById('form-message').textContent='Thanks! Your message has been received. Connect a backend/email service to send it for real.';e.target.reset()}
+document.addEventListener('DOMContentLoaded',()=>{authLinks();const btn=document.querySelector('.menu-btn');const links=document.querySelector('.nav-links');if(btn)btn.onclick=()=>links.classList.toggle('open');const name=document.getElementById('user-name');if(name){const u=localStorage.getItem('hellhost_user');if(!u){location.href='login.html'}else{name.textContent=u.split('@')[0]}}});
