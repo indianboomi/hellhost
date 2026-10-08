@@ -17,6 +17,10 @@ function logout(e){
   localStorage.removeItem('hellhost_free_month');
   location.href='index.html';
 }
+function startOAuth(provider){
+  const message=document.getElementById('login-message');
+  if(message) message.textContent=provider+' OAuth is ready in the UI. Connect the provider credentials/backend to enable real sign-in.';
+}
 function sendContact(e){
   e.preventDefault();
   const m=document.getElementById('form-message');
