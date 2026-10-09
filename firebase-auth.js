@@ -113,7 +113,7 @@ window.startOAuth = async function(providerName) {
       try {
         const credential = await signInWithCustomToken(auth, event.data.token);
         if (event.data.displayName) {
-          await updateProfile(credential.user, { displayName: String(event.data.displayName).slice(0, 80) });
+          await updateProfile(credential.user, { displayName: String(event.data.displayName).slice(0, 80), ...(typeof event.data.avatarUrl === "string" && event.data.avatarUrl.startsWith("https://cdn.discordapp.com/") ? { photoURL: event.data.avatarUrl } : {}) });
         }
         if (discordPopup && !discordPopup.closed) discordPopup.close();
         location.href = "dashboard.html";
@@ -162,7 +162,10 @@ onAuthStateChanged(auth, user => {
   document.querySelectorAll(".auth-menu").forEach(el => {
     if (user) {
       const label = user.displayName || (user.email ? user.email.split("@")[0] : "Host");
-      el.innerHTML = '<a class="user-link" href="dashboard.html"><span class="user-icon">👤</span> ' + escapeHtml(label) + '</a><a class="logout-link" href="#" onclick="logout(event)"><span>🚪</span> Logout</a>';
+      const avatar = typeof user.photoURL === "string" && /^https:\/\//i.test(user.photoURL)
+        ? '<img class="user-photo" src="' + escapeHtml(user.photoURL) + '" alt="" referrerpolicy="no-referrer">'
+        : '<span class="user-icon">' + escapeHtml((label.trim()[0] || "H").toUpperCase()) + '</span>';
+      el.innerHTML = '<a class="user-link" href="dashboard.html">' + avatar + ' <span class="user-name-nav">' + escapeHtml(label) + '</span></a><a class="logout-link" href="#" onclick="logout(event)"><span>🚪</span> Logout</a>';
     } else {
       el.innerHTML = '<a class="login-nav" href="login.html">Login</a>';
     }
