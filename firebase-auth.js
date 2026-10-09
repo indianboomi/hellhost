@@ -51,7 +51,7 @@ window.login = async function(event) {
   showMessage("login-message", "Signing in…");
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    location.href = "panel.html";
+    location.href = "vps.html";
   } catch (error) {
     showMessage("login-message", friendlyError(error));
   } finally {
@@ -73,7 +73,7 @@ window.signup = async function(event) {
   showMessage("signup-message", "Creating your account…");
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-    location.href = "panel.html";
+    location.href = "vps.html";
   } catch (error) {
     showMessage("signup-message", friendlyError(error));
   } finally {
@@ -116,7 +116,7 @@ window.startOAuth = async function(providerName) {
           await updateProfile(credential.user, { displayName: String(event.data.displayName).slice(0, 80), ...(typeof event.data.avatarUrl === "string" && event.data.avatarUrl.startsWith("https://cdn.discordapp.com/") ? { photoURL: event.data.avatarUrl } : {}) });
         }
         if (discordPopup && !discordPopup.closed) discordPopup.close();
-        location.href = "panel.html";
+        location.href = "vps.html";
       } catch (error) {
         showMessage(messageId, friendlyError(error));
       }
@@ -136,7 +136,7 @@ window.startOAuth = async function(providerName) {
   showMessage("login-message", "Opening " + providerName + " sign-in…");
   try {
     await signInWithPopup(auth, provider);
-    location.href = "panel.html";
+    location.href = "vps.html";
   } catch (error) {
     showMessage("login-message", friendlyError(error));
   }
@@ -165,7 +165,7 @@ onAuthStateChanged(auth, user => {
       const avatar = typeof user.photoURL === "string" && /^https:\/\//i.test(user.photoURL)
         ? '<img class="user-photo" src="' + escapeHtml(user.photoURL) + '" alt="" referrerpolicy="no-referrer">'
         : '<span class="user-icon">' + escapeHtml((label.trim()[0] || "H").toUpperCase()) + '</span>';
-      el.innerHTML = '<a class="user-link" href="panel.html">' + avatar + ' <span class="user-name-nav">' + escapeHtml(label) + '</span></a><a class="logout-link" href="#" onclick="logout(event)"><span>🚪</span> Logout</a>';
+      el.innerHTML = '<a class="user-link" href="vps.html">' + avatar + ' <span class="user-name-nav">' + escapeHtml(label) + '</span></a><a class="logout-link" href="#" onclick="logout(event)"><span>🚪</span> Logout</a>';
     } else {
       el.innerHTML = '<a class="login-nav" href="login.html">Login</a>';
     }
@@ -180,6 +180,6 @@ onAuthStateChanged(auth, user => {
     }
   }
   if (user && (location.pathname.endsWith("/login.html") || location.pathname.endsWith("/signup.html"))) {
-    location.replace("panel.html");
+    location.replace("vps.html");
   }
 });
