@@ -86,3 +86,57 @@ body.login-page{
 .login-page .auth-card{background:rgba(255,255,255,.97);border:1px solid #afb8c1;box-shadow:0 18px 60px rgba(31,35,40,.18)}
 .login-page .oauth-logo-img{display:inline-block!important;visibility:visible!important;opacity:1!important;width:24px;height:24px;object-fit:contain;flex:0 0 24px}
 .login-page .oauth-btn{display:flex;align-items:center;gap:12px;min-height:48px}
+
+/* Shared dark, purple-accented auth design based on the supplied reference */
+body.auth-design{min-height:100vh;color:#f4f6ff;background:radial-gradient(ellipse at 50% 42%,rgba(30,38,68,.26),transparent 47%),linear-gradient(135deg,#0b0e18 0%,#0b0f1a 52%,#080b14 100%);position:relative;overflow-x:hidden}
+body.auth-design:before{content:"";position:fixed;z-index:0;pointer-events:none;left:-90px;top:-125px;width:350px;height:290px;background:#3437a1;opacity:.3;border-radius:0 0 70% 0;transform:rotate(-8deg)}
+body.auth-design:after{content:"";position:fixed;z-index:0;pointer-events:none;right:-100px;bottom:-175px;width:400px;height:360px;background:#3737a9;opacity:.28;border-radius:70% 0 0 0;transform:rotate(-7deg)}
+.auth-design .nav-wrap{background:transparent;border:0;position:absolute;top:0;left:0;width:100%;height:1px;overflow:visible}
+.auth-design .nav{height:1px;justify-content:flex-start}
+.auth-design .brand{position:absolute;left:24px;top:20px;opacity:.88;font-size:17px}
+.auth-design .brand-logo{width:32px;height:32px;flex-basis:32px}
+.auth-design .auth-page{position:relative;z-index:1;min-height:100vh;padding:38px 18px 55px;display:flex;align-items:center;justify-content:center}
+.auth-design .auth-card{width:min(642px,100%);max-width:642px;padding:38px 48px 32px;display:flex;flex-direction:column;gap:0;border:1px solid #2a344b;border-radius:18px;background:linear-gradient(145deg,rgba(17,23,38,.96),rgba(13,18,31,.97));box-shadow:0 25px 80px rgba(0,0,0,.24);color:#f5f7ff;position:relative;z-index:2}
+.auth-design .auth-brandline{display:flex;justify-content:center;align-items:center;gap:13px;font-size:40px;font-weight:800;letter-spacing:-1.4px;line-height:1.2;margin:0 auto 7px}
+.auth-design .auth-brandline b{color:#5c60ff}
+.auth-design .auth-flame{display:inline-flex;align-items:center;justify-content:center;font-size:64px;font-weight:900;line-height:1;color:#5755ff;transform:rotate(12deg)}
+.auth-design .auth-tagline{text-align:center;color:#8e9ab8;margin:5px 0 28px;font-size:14px;letter-spacing:.3px}
+.auth-design .auth-tagline i{font-style:normal;padding:0 12px;color:#65718f}
+.auth-design .auth-card h1{text-align:center;color:#f4f6ff;font-size:34px;letter-spacing:-.8px;margin:0 0 7px;line-height:1.25}
+.auth-design .auth-card h1 span{color:#f4f6ff}
+.auth-design .auth-card>.muted{text-align:center;color:#929fbc;font-size:16px;margin:0 0 26px}
+.auth-design .auth-card form{display:grid;gap:18px}
+.auth-design .auth-card label.auth-input-wrap{display:flex;align-items:center;gap:13px;min-height:59px;padding:0 16px;border:1px solid #303c57;border-radius:12px;background:rgba(14,20,34,.72);color:#95a2bf}
+.auth-design .auth-card .field-icon{font-size:22px;line-height:1;color:#9aa8c8;width:20px;text-align:center;flex:0 0 20px}
+.auth-design .auth-card .auth-input-wrap input{min-width:0;flex:1;border:0;background:transparent;color:#f6f7ff;padding:14px 0;outline:none;box-shadow:none;font-size:15px}
+.auth-design .auth-card .auth-input-wrap input::placeholder{color:#8996b2;opacity:1}
+.auth-design .auth-card .auth-input-wrap:focus-within{border-color:#5757ff;box-shadow:0 0 0 3px rgba(81,82,255,.12)}
+.auth-design .auth-submit{min-height:59px;margin-top:10px;background:linear-gradient(100deg,#5654ff,#414df5);border:0;border-radius:12px;box-shadow:0 12px 26px rgba(66,75,255,.15);font-size:15px}
+.auth-design .auth-submit span{font-size:26px;line-height:1;margin-left:7px}
+.auth-design .divider{height:1px;background:#303a53;margin:36px 0 28px;text-align:center}
+.auth-design .divider span{top:-13px;background:#111726;color:#96a2be;padding:0 16px;font-size:13px}
+.auth-design .oauth-buttons{display:grid;gap:14px;margin:0}
+.auth-design .oauth-btn{justify-content:flex-start;min-height:59px;padding:12px 22px;gap:17px;border:1px solid #303c57;border-radius:12px;background:rgba(29,36,53,.78);color:#f4f6ff;font-size:15px;font-weight:500;box-shadow:none}
+.auth-design .oauth-btn:hover{transform:translateY(-1px);background:#222b41;border-color:#515f81}
+.auth-design .oauth-logo-img{width:36px;height:36px;flex:0 0 36px;object-fit:contain;border-radius:0;background:transparent}
+.auth-design .signup{color:#a0abc4;font-size:13px;margin:39px 0 0}
+.auth-design .signup a{color:#6668ff;font-weight:750}
+.auth-design #login-message,.auth-design #signup-message{margin:10px 0 0;text-align:center;color:#ff8994;font-size:13px}
+.auth-design.signup-page .auth-card{padding-top:32px}
+.auth-design.signup-page .auth-tagline{margin-bottom:22px}
+.auth-design.signup-page .auth-card form{gap:14px}
+.auth-design.signup-page .signup{margin-top:25px}
+@media(max-width:640px){
+ .auth-design .auth-page{padding:24px 14px}
+ .auth-design .auth-card{padding:30px 22px 27px;border-radius:16px}
+ .auth-design .auth-brandline{font-size:33px}
+ .auth-design .auth-flame{font-size:53px}
+ .auth-design .auth-tagline{font-size:12px;margin-bottom:23px}
+ .auth-design .auth-tagline i{padding:0 6px}
+ .auth-design .auth-card h1{font-size:29px}
+ .auth-design .auth-card>.muted{font-size:14px;margin-bottom:22px}
+ .auth-design .oauth-btn{min-height:54px;padding:10px 15px;font-size:14px}
+ .auth-design .oauth-logo-img{width:31px;height:31px;flex-basis:31px}
+ .auth-design .divider{margin:29px 0 23px}
+ .auth-design .signup{margin-top:28px}
+}
