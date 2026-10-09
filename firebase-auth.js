@@ -21,7 +21,7 @@ const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
 // Replace this with your deployed Render service URL after deployment.
-const DISCORD_AUTH_URL = "";
+const DISCORD_AUTH_URL = "https://hellhost-discord-auth.onrender.com";
 
 function showMessage(id, message) {
   const el = document.getElementById(id);
