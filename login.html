@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Login — Hell Host</title><link rel="stylesheet" href="style.css"><link rel="icon" type="image/svg+xml" href="hellhost-logo.svg"></head>
-<body class="login-page">
+<body class="auth-design login-page">
 <header class="nav-wrap"><nav class="nav container"><a class="brand" href="index.html"><img class="brand-logo" src="hellhost-logo.svg" alt="Hell Host logo"><span>Hell<span>Host</span></span></a></nav></header>
 <main class="auth-page"><section class="auth-card">
-<div class="eyebrow">WELCOME TO HELL HOST</div><h1>Login to <span>Hell Host</span></h1>
-<p class="muted">Login with your Hell Host account or continue with a provider.</p>
+<div class="auth-brandline"><span class="auth-flame">ϟ</span><span>Hell <b>Host</b></span></div><p class="auth-tagline">Fast <i>•</i> Reliable <i>•</i> Affordable</p><h1>Welcome Back</h1><p class="muted">Login to your Hell Host account</p>
 <form onsubmit="login(event)">
-<label>Email<input id="email" type="email" placeholder="you@example.com" required></label>
-<label>Password<input id="password" type="password" placeholder="Your password" required></label>
-<button class="btn primary full" type="submit">Login →</button>
+<label class="auth-input-wrap"><span class="field-icon">✉</span><input id="email" type="email" placeholder="Email address" required></label>
+<label class="auth-input-wrap"><span class="field-icon">♙</span><input id="password" type="password" placeholder="Password" required></label>
+<button class="btn primary full auth-submit" type="submit">Login <span>→</span></button>
 </form>
 <div class="divider"><span>OR</span></div>
 <div class="oauth-buttons">
