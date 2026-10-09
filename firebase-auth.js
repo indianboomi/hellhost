@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 import {
   getAuth, onAuthStateChanged, createUserWithEmailAndPassword,
-  signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider,
-  GithubAuthProvider, signOut
+  signInWithEmailAndPassword, signInWithPopup, signInWithCustomToken,
+  updateProfile, GoogleAuthProvider, GithubAuthProvider, signOut
 } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -20,6 +20,8 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
+// Replace this with your deployed Render service URL after deployment.
+const DISCORD_AUTH_URL = "";
 
 function showMessage(id, message) {
   const el = document.getElementById(id);
@@ -79,9 +81,55 @@ window.signup = async function(event) {
   }
 };
 
+let discordPopup = null;
+let discordPopupTimer = null;
+let discordMessageHandler = null;
+
 window.startOAuth = async function(providerName) {
   if (providerName === "Discord") {
-    showMessage("login-message", "Discord is not a built-in Firebase provider. Google and GitHub sign-in are supported here; Discord needs a separate OAuth/OIDC setup.");
+    const messageId = document.getElementById("login-message") ? "login-message" : "signup-message";
+    if (!DISCORD_AUTH_URL || !DISCORD_AUTH_URL.startsWith("https://")) {
+      showMessage(messageId, "Discord login setup is not finished yet. Configure the backend URL in firebase-auth.js first.");
+      return;
+    }
+    showMessage(messageId, "Opening Discord sign-in…");
+    discordPopup = window.open(
+      DISCORD_AUTH_URL.replace(/\\/$/, "") + "/auth/discord",
+      "hellhost-discord-login",
+      "popup,width=520,height=720"
+    );
+    if (!discordPopup) {
+      showMessage(messageId, "Your browser blocked the sign-in popup. Allow popups and try again.");
+      return;
+    }
+    if (discordMessageHandler) window.removeEventListener("message", discordMessageHandler);
+    discordMessageHandler = async event => {
+      if (event.origin !== window.location.origin ||
+          event.data?.type !== "hellhost-discord-auth" ||
+          typeof event.data?.token !== "string") return;
+      window.removeEventListener("message", discordMessageHandler);
+      discordMessageHandler = null;
+      if (discordPopupTimer) window.clearInterval(discordPopupTimer);
+      try {
+        const credential = await signInWithCustomToken(auth, event.data.token);
+        if (event.data.displayName) {
+          await updateProfile(credential.user, { displayName: String(event.data.displayName).slice(0, 80) });
+        }
+        if (discordPopup && !discordPopup.closed) discordPopup.close();
+        location.href = "dashboard.html";
+      } catch (error) {
+        showMessage(messageId, friendlyError(error));
+      }
+    };
+    window.addEventListener("message", discordMessageHandler);
+    discordPopupTimer = window.setInterval(() => {
+      if (discordPopup && discordPopup.closed) {
+        window.clearInterval(discordPopupTimer);
+        discordPopupTimer = null;
+        if (discordMessageHandler) window.removeEventListener("message", discordMessageHandler);
+        discordMessageHandler = null;
+      }
+    }, 500);
     return;
   }
   const provider = providerName === "Google" ? googleProvider : githubProvider;
