@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hell Host owner and administrator VPS control panel.">
+<title>VPS Admin Panel — Hell Host</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="hellhost-logo.svg">
+<style>
+.admin-wrap{padding:36px 0 72px}.admin-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:26px}.admin-top h1{font-size:clamp(28px,4vw,40px);margin:6px 0}.admin-top p{color:#aeb4c2;margin:0}.admin-badge{border:1px solid #414654;border-radius:999px;padding:7px 11px;font-size:12px;color:#ffc1c8;white-space:nowrap}.admin-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:18px;align-items:start}.admin-card{background:#101219;border:1px solid #272b36;border-radius:16px;padding:22px;margin-bottom:18px}.admin-card h2{font-size:18px;margin:0 0 5px}.admin-muted{color:#9ca3b3;font-size:13px;margin:0 0 18px}.admin-label{display:block;font-size:13px;margin:13px 0 7px;color:#d9dce5}.admin-input{width:100%;background:#090b10;color:#fff;border:1px solid #343947;border-radius:9px;padding:12px;font:inherit;min-height:44px}.admin-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-btn{border:0;cursor:pointer;margin-top:18px}.admin-msg{display:none;padding:12px;border-radius:9px;background:#251b10;border:1px solid #76562a;color:#ffdda9;font-size:13px;margin-top:14px;overflow-wrap:anywhere}.admin-server{padding:13px 0;border-bottom:1px solid #292d37}.admin-server:last-child{border-bottom:0}.admin-server-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.admin-server strong{overflow-wrap:anywhere}.admin-server p{font-size:12px;color:#aeb4c2;margin:5px 0 0}.admin-status{font-size:11px;border-radius:999px;background:#232731;padding:4px 8px;color:#c8ceda}.admin-status.running{color:#a4efbf;background:#13251b}.admin-warning{border:1px solid #6e522c;background:#211a10;color:#f6d7a5;border-radius:10px;padding:13px;font-size:12px;line-height:1.6}.admin-empty{padding:22px 0;color:#9ca3b3;font-size:13px}.admin-actions{display:flex;gap:10px;flex-wrap:wrap}.admin-actions .btn{cursor:pointer}.admin-user{font-size:12px;color:#9ca3b3;overflow-wrap:anywhere}@media(max-width:800px){.admin-grid{grid-template-columns:1fr}.admin-top{flex-direction:column}.admin-fields{grid-template-columns:1fr}}@media(max-width:480px){.admin-card{padding:17px}.container{width:min(100% - 28px,1120px)}}
+</style>
+</head>
+<body>
+<header class="nav-wrap"><nav class="nav container"><a class="brand" href="index.html"><img class="brand-logo" src="hellhost-logo.svg" alt="Hell Host logo"><span>Hell<span>Host</span></span></a><div class="nav-links"><button class="menu-trigger" type="button" id="menu-trigger" aria-label="Open menu" aria-expanded="false">☰</button><div class="site-menu" id="site-menu"><a href="index.html">Home</a><a href="vps.html">VPS Setup</a><a href="admin.html" class="active">Admin Panel</a><span class="auth-menu"></span></div></div></nav></header>
+<main class="admin-wrap container">
+<div class="admin-top"><div><div class="eyebrow">HELL HOST · OWNER TOOLS</div><h1>VPS Control Panel</h1><p>Provision and monitor Hell Host VPS instances from one admin workspace.</p><div id="admin-user" class="admin-user" style="margin-top:8px">Checking your sign-in…</div></div><span class="admin-badge">OWNER / ADMIN ONLY</span></div>
+<div class="admin-warning" style="margin-bottom:20px"><strong>Safe mode:</strong> Live provisioning is controlled by server-side environment settings. The admin page cannot enable it by itself. Never put provider API tokens in this page or in GitHub.</div>
+<div class="admin-grid">
+<section class="admin-card"><h2>Create a VPS</h2><p class="admin-muted">Only authorized administrator accounts can send a create request.</p>
+<form id="create-form">
+<label class="admin-label" for="hostname">Hostname</label><input class="admin-input" id="hostname" value="hellhost-vps" maxlength="40" pattern="[A-Za-z0-9][A-Za-z0-9.-]*[A-Za-z0-9]" required>
+<div class="admin-fields"><div><label class="admin-label" for="os">Operating system</label><select class="admin-input" id="os"><option>Ubuntu 24.04 LTS</option><option>Ubuntu 22.04 LTS</option><option>Debian 12</option></select></div><div><label class="admin-label" for="region">Region</label><select class="admin-input" id="region"><option value="Germany">Germany · Falkenstein</option><option value="Finland">Finland · Helsinki</option><option value="United States">United States · Ashburn</option></select></div></div>
+<label class="admin-label" for="size">Server size</label><select class="admin-input" id="size"><option value="Fire">Fire · 2 GB RAM · 2 vCPU</option><option value="Inferno">Inferno · 4 GB RAM · 2 vCPU</option><option value="Hellfire">Hellfire · 8 GB RAM · 4 vCPU</option></select>
+<div class="admin-actions"><button class="btn primary admin-btn" type="submit">Create VPS →</button><button class="btn ghost admin-btn" type="button" id="refresh">Refresh servers</button></div>
+<div id="create-msg" class="admin-msg" role="status"></div>
+</form></section>
+<aside class="admin-card"><h2>Infrastructure status</h2><p class="admin-muted">Backend and provider connection status.</p><div class="admin-server"><div class="admin-server-head"><strong>Admin authentication</strong><span class="admin-status" id="auth-status">Checking</span></div><p>Verified by Firebase ID token on the backend.</p></div><div class="admin-server"><div class="admin-server-head"><strong>VPS provider</strong><span class="admin-status" id="provider-status">Checking</span></div><p>Provider token is kept in Render environment variables.</p></div><div class="admin-server"><div class="admin-server-head"><strong>Provisioning</strong><span class="admin-status" id="provision-status">Checking</span></div><p>Live creation remains disabled until enabled by the owner in backend configuration.</p></div><div class="admin-warning" style="margin-top:16px">Before enabling production: configure payment collection, per-user limits, abuse prevention, server deletion, audit logs, and provider spending alerts.</div></aside>
+</div>
+<section class="admin-card"><div class="admin-server-head"><div><h2>Managed VPS instances</h2><p class="admin-muted" style="margin:4px 0 0">Only instances labelled as managed by Hell Host are listed.</p></div><span class="admin-status" id="server-count">— servers</span></div><div id="server-list" class="admin-empty">Sign in with an authorized admin account to load servers.</div><div id="list-msg" class="admin-msg" role="status"></div></section>
+</main>
+<footer><div class="container footer-inner"><span>© 2026 Hell Host · Admin</span></div></footer>
+<script src="script.js"></script><script type="module" src="firebase-auth.js"></script>
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+const firebaseConfig={apiKey:"AIzaSyDuQ1uw_bqhgj_wEJ5--KujbRJByQpiF8U",authDomain:"hellhostlogin.firebaseapp.com",projectId:"hellhostlogin",storageBucket:"hellhostlogin.firebasestorage.app",messagingSenderId:"943477772588",appId:"1:943477772588:web:d93ef8a3f225a09aa79c89",measurementId:"G-HZ1Z82Q6HH"};
+const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const API="https://hellhost-discord-auth.onrender.com";
+const $=id=>document.getElementById(id);
+let currentUser=null;
+function message(id,text){const el=$(id);el.style.display="block";el.textContent=text;}
+function setStatus(id,text,good=false){const el=$(id);el.textContent=text;el.className="admin-status"+(good?" running":"");}
+async function request(path,options={}){if(!currentUser)throw new Error("Please log in first.");const token=await currentUser.getIdToken();const response=await fetch(API+path,{...options,headers:{"Content-Type":"application/json","Authorization":"Bearer "+token,...options.headers}});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||"Request failed.");return data;}
+async function loadServers(){const list=$("server-list");list.textContent="Loading servers…";try{const data=await request("/api/admin/vps/servers");$("server-count").textContent=data.servers.length+" servers";list.innerHTML="";if(!data.servers.length){list.textContent="No managed VPS instances found.";return;}for(const s of data.servers){const row=document.createElement("div");row.className="admin-server";const head=document.createElement("div");head.className="admin-server-head";const name=document.createElement("strong");name.textContent=s.name+" · #"+s.id;const status=document.createElement("span");status.className="admin-status"+(s.status==="running"?" running":"");status.textContent=s.status;head.append(name,status);const detail=document.createElement("p");detail.textContent="IPv4: "+(s.ipv4||"pending")+" · Location: "+s.datacenter;row.append(head,detail);list.append(row);}}catch(e){list.textContent="";message("list-msg",e.message);}}
+onAuthStateChanged(auth,user=>{currentUser=user;if(!user){$("admin-user").textContent="Not signed in · sign in first";setStatus("auth-status","Signed out");$("server-list").textContent="Please sign in, then reload this page.";return;}$("admin-user").textContent="Signed in as "+(user.email||user.uid);setStatus("auth-status","Signed in",true);loadServers().then(()=>{setStatus("provider-status","Check backend");setStatus("provision-status","Server controlled");}).catch(()=>{});});
+$("create-form").addEventListener("submit",async e=>{e.preventDefault();const btn=e.submitter;btn.disabled=true;try{const result=await request("/api/vps/create",{method:"POST",body:JSON.stringify({hostname:$("hostname").value,os:$("os").value,region:$("region").value,size:$("size").value,sshKey:""})});message("create-msg","VPS created: "+result.name+" · status: "+result.status+" · IPv4: "+(result.ipv4||"pending"));await loadServers();}catch(err){message("create-msg",err.message);}finally{btn.disabled=false;}});
+$("refresh").addEventListener("click",()=>loadServers());
+</script>
+</body>
+</html>
