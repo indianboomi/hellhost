@@ -94,7 +94,7 @@ window.startOAuth = async function(providerName) {
     }
     showMessage(messageId, "Opening Discord sign-in…");
     discordPopup = window.open(
-      DISCORD_AUTH_URL.replace(/\\/$/, "") + "/auth/discord",
+      DISCORD_AUTH_URL.replace(/\/$/, "") + "/auth/discord",
       "hellhost-discord-login",
       "popup,width=520,height=720"
     );
