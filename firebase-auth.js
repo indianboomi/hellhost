@@ -104,7 +104,7 @@ window.startOAuth = async function(providerName) {
     }
     if (discordMessageHandler) window.removeEventListener("message", discordMessageHandler);
     discordMessageHandler = async event => {
-      if (event.origin !== window.location.origin ||
+      if (event.origin !== new URL(DISCORD_AUTH_URL).origin ||
           event.data?.type !== "hellhost-discord-auth" ||
           typeof event.data?.token !== "string") return;
       window.removeEventListener("message", discordMessageHandler);
