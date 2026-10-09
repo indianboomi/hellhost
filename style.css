@@ -140,3 +140,58 @@ body.auth-design:after{content:"";position:fixed;z-index:0;pointer-events:none;r
  .auth-design .divider{margin:29px 0 23px}
  .auth-design .signup{margin-top:28px}
 }
+
+/* Exact auth-page layout matching the supplied Hell Host login screenshot */
+body.auth-design{background:#090d17 url("auth-background.svg") center center/cover fixed no-repeat!important;color:#f4f6ff!important;min-height:100vh;overflow-x:hidden}
+body.auth-design:before,body.auth-design:after{display:none!important}
+.auth-design .nav-wrap{display:none!important}
+.auth-design .auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px}
+.auth-design .auth-shell{width:min(642px,100%);display:flex;flex-direction:column;align-items:stretch}
+.auth-design .auth-brandline{display:flex;justify-content:center;align-items:center;gap:14px;font-size:58px;font-weight:800;letter-spacing:-2px;line-height:1.15;margin:0 auto 10px;color:#f8f9ff}
+.auth-design .auth-brandline b{color:#5a5bff}
+.auth-design .auth-flame{display:block;width:58px;height:74px;flex:0 0 58px;transform:none}
+.auth-design .auth-tagline{text-align:center;color:#8c9ab9;margin:10px 0 42px;font-size:18px;letter-spacing:.1px}
+.auth-design .auth-tagline i{font-style:normal;padding:0 13px;color:#74819e}
+.auth-design .auth-card{width:100%;max-width:none;margin:0;padding:39px 49px 37px;display:flex;flex-direction:column;gap:0;border:1px solid #2a354c;border-radius:18px;background:rgba(14,19,32,.88);box-shadow:0 20px 65px rgba(0,0,0,.2);color:#f5f7ff;backdrop-filter:blur(6px)}
+.auth-design .auth-card h1{text-align:center;color:#f6f7ff;font-size:34px;letter-spacing:-.7px;margin:0 0 8px;line-height:1.25}
+.auth-design .auth-card>.muted{text-align:center;color:#91a0bd;font-size:18px;margin:0 0 27px}
+.auth-design .auth-card form{display:grid;gap:19px}
+.auth-design .auth-card label.auth-input-wrap{display:flex;align-items:center;gap:16px;min-height:59px;padding:0 17px;border:1px solid #303d59;border-radius:12px;background:rgba(14,20,34,.7);color:#9ba9c6}
+.auth-design .auth-card .field-icon{font-size:24px;line-height:1;color:#98a8c7;width:22px;text-align:center;flex:0 0 22px}
+.auth-design .auth-card .auth-input-wrap input{min-width:0;flex:1;border:0;background:transparent;color:#f6f7ff;padding:15px 0;outline:none;box-shadow:none;font-size:17px}
+.auth-design .auth-card .auth-input-wrap input::placeholder{color:#8a98b5;opacity:1}
+.auth-design .auth-card .auth-input-wrap:focus-within{border-color:#585aff;box-shadow:0 0 0 3px rgba(81,82,255,.12)}
+.auth-design .auth-submit{min-height:60px;margin-top:8px;background:linear-gradient(100deg,#5754ff,#454cf4);border:0;border-radius:12px;box-shadow:none;font-size:17px}
+.auth-design .auth-submit span{font-size:28px;line-height:1;margin-left:10px}
+.auth-design .divider{height:1px;background:#303a53;margin:39px 0 29px;text-align:center}
+.auth-design .divider span{top:-13px;background:#101625;color:#96a2be;padding:0 16px;font-size:15px}
+.auth-design .oauth-buttons{display:grid;gap:14px;margin:0}
+.auth-design .oauth-btn{display:flex;align-items:center;justify-content:flex-start;gap:17px;min-height:59px;padding:12px 22px;border:1px solid #303c57;border-radius:12px;background:rgba(29,36,53,.78);color:#f4f6ff;font-size:16px;font-weight:500;box-shadow:none}
+.auth-design .oauth-btn:hover{transform:translateY(-1px);background:#222b41;border-color:#515f81}
+.auth-design .oauth-logo-img{display:inline-block!important;visibility:visible!important;opacity:1!important;width:37px;height:37px;flex:0 0 37px;object-fit:contain;border-radius:0;background:transparent}
+.auth-design .signup{color:#a0abc4;font-size:15px;margin:39px 0 0}
+.auth-design .signup a{color:#6265ff;font-weight:750}
+.auth-design #login-message,.auth-design #signup-message{margin:10px 0 0;text-align:center;color:#ff8994;font-size:13px}
+.auth-design.signup-page .auth-card{padding-top:39px}
+.auth-design.signup-page .auth-tagline{margin-bottom:42px}
+.auth-design.signup-page .auth-card form{gap:17px}
+.auth-design.signup-page .signup{margin-top:29px}
+@media(max-width:640px){
+ .auth-design .auth-page{padding:24px 14px}
+ .auth-design .auth-shell{width:min(100%,500px)}
+ .auth-design .auth-brandline{font-size:42px;gap:10px}
+ .auth-design .auth-flame{width:44px;height:57px;flex-basis:44px}
+ .auth-design .auth-tagline{font-size:13px;margin:8px 0 26px}
+ .auth-design .auth-tagline i{padding:0 6px}
+ .auth-design .auth-card{padding:27px 20px 25px;border-radius:15px}
+ .auth-design .auth-card h1{font-size:28px}
+ .auth-design .auth-card>.muted{font-size:14px;margin-bottom:21px}
+ .auth-design .auth-card form{gap:13px}
+ .auth-design .auth-card label.auth-input-wrap{min-height:54px}
+ .auth-design .auth-card .auth-input-wrap input{font-size:14px}
+ .auth-design .auth-submit{min-height:54px;font-size:15px}
+ .auth-design .divider{margin:29px 0 22px}
+ .auth-design .oauth-btn{min-height:53px;padding:9px 14px;font-size:14px;gap:13px}
+ .auth-design .oauth-logo-img{width:31px;height:31px;flex-basis:31px}
+ .auth-design .signup{font-size:12px;margin-top:27px}
+}
