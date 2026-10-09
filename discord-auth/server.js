@@ -61,7 +61,7 @@ app.get("/auth/discord/callback", async (req, res) => {
 
   if (error) return res.status(400).send("Discord authorization was cancelled. You can close this window.");
   if (typeof code !== "string" || typeof state !== "string" ||
-      typeof savedState !== "string" || !crypto.timingSafeEqual(Buffer.from(state), Buffer.from(savedState))) {
+      typeof savedState !== "string" || state.length !== savedState.length || !crypto.timingSafeEqual(Buffer.from(state), Buffer.from(savedState))) {
     return res.status(400).send("Invalid or expired sign-in request. Close this window and try again.");
   }
 
