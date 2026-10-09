@@ -203,3 +203,6 @@ body.auth-design:before,body.auth-design:after{display:none!important}
 /* Keep the blue Hell Host logo compact and consistent on both auth pages */
 .auth-design .auth-brand-logo{width:48px;height:48px;flex:0 0 48px;object-fit:contain}
 @media(max-width:640px){.auth-design .auth-brand-logo{width:40px;height:40px;flex-basis:40px}}
+
+/* Social login profile avatars */
+.auth-menu .user-link{display:flex!important;align-items:center;gap:9px}.auth-menu .user-photo{display:block;width:28px;height:28px;flex:0 0 28px;object-fit:cover;border-radius:50%;border:1px solid #343844}.auth-menu .user-icon{display:grid;place-items:center;width:28px;height:28px;flex:0 0 28px;border-radius:50%;background:#ff3d50;color:#fff;font-size:12px;font-weight:800}.auth-menu .user-name-nav{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff}
