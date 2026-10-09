@@ -199,3 +199,7 @@ body.auth-design:before,body.auth-design:after{display:none!important}
 /* Blue Hell Host mascot logo in the login-page wordmark */
 .auth-design .auth-brand-logo{display:block;width:72px;height:72px;flex:0 0 72px;object-fit:contain}
 @media(max-width:640px){.auth-design .auth-brand-logo{width:53px;height:53px;flex-basis:53px}}
+
+/* Keep the blue Hell Host logo compact and consistent on both auth pages */
+.auth-design .auth-brand-logo{width:48px;height:48px;flex:0 0 48px;object-fit:contain}
+@media(max-width:640px){.auth-design .auth-brand-logo{width:40px;height:40px;flex-basis:40px}}
