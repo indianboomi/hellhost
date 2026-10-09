@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Create Account — Hell Host</title><link rel="stylesheet" href="style.css"><link rel="icon" type="image/svg+xml" href="hellhost-logo.svg"></head>
-<body><header class="nav-wrap"><nav class="nav container"><a class="brand" href="index.html"><img class="brand-logo" src="hellhost-logo.svg" alt="Hell Host logo"><span>Hell<span>Host</span></span></a></nav></header>
-<main class="auth-page"><section class="auth-card"><div class="eyebrow">JOIN HELL HOST</div><h1>Create <span>Account</span></h1><p class="muted">Create your account and start your first month free.</p>
+<body class="auth-design signup-page"><header class="nav-wrap"><nav class="nav container"><a class="brand" href="index.html"><img class="brand-logo" src="hellhost-logo.svg" alt="Hell Host logo"><span>Hell<span>Host</span></span></a></nav></header>
+<main class="auth-page"><section class="auth-card"><div class="auth-brandline"><span class="auth-flame">ϟ</span><span>Hell <b>Host</b></span></div><p class="auth-tagline">Fast <i>•</i> Reliable <i>•</i> Affordable</p><h1>Create Account</h1><p class="muted">Create your Hell Host account</p>
 <form onsubmit="signup(event)">
-<label>Email<input id="signup-email" type="email" placeholder="you@example.com" required></label>
-<label>Password<input id="signup-password" type="password" minlength="6" placeholder="At least 6 characters" required></label>
-<label>Confirm Password<input id="signup-confirm" type="password" minlength="6" placeholder="Repeat your password" required></label>
-<button class="btn primary full" type="submit">Create Account →</button>
+<label class="auth-input-wrap"><span class="field-icon">✉</span><input id="signup-email" type="email" placeholder="Email address" required></label>
+<label class="auth-input-wrap"><span class="field-icon">♙</span><input id="signup-password" type="password" minlength="6" placeholder="Password (at least 6 characters)" required></label>
+<label class="auth-input-wrap"><span class="field-icon">♙</span><input id="signup-confirm" type="password" minlength="6" placeholder="Confirm password" required></label>
+<button class="btn primary full auth-submit" type="submit">Create Account <span>→</span></button>
 </form><p class="signup">Already have an account? <a href="login.html">Login</a></p><p id="signup-message"></p></section></main><script src="script.js"></script></body></html>
