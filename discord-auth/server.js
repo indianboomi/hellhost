@@ -132,6 +132,7 @@ if (window.opener) {
 // Required environment variables to enable: HETZNER_API_TOKEN and VPS_PROVISIONING_ENABLED=true.
 const VPS_PROVISIONING_ENABLED = process.env.VPS_PROVISIONING_ENABLED === "true";
 const HETZNER_API_TOKEN = process.env.HETZNER_API_TOKEN || "";
+const VPS_ADMIN_UIDS = new Set((process.env.VPS_ADMIN_UIDS || "").split(",").map(value => value.trim()).filter(Boolean));
 const allowedFrontendOrigin = FRONTEND_ORIGIN;
 
 app.options("/api/vps/create", (req, res) => {
@@ -159,9 +160,13 @@ app.post("/api/vps/create", async (req, res) => {
     return res.status(401).json({ error: "Your session is invalid or expired. Please sign in again." });
   }
 
+  if (!VPS_ADMIN_UIDS.has(user.uid)) {
+    return res.status(403).json({ error: "Only an authorized Hell Host administrator can provision VPS servers. Open the admin panel or contact the owner." });
+  }
+
   if (!VPS_PROVISIONING_ENABLED || !HETZNER_API_TOKEN) {
     return res.status(503).json({
-      error: "VPS setup preview is ready, but live provisioning is disabled until billing, account limits, and provider credentials are configured."
+      error: "VPS provisioning is disabled. An owner must configure the provider token, billing, and spending limits in Render first."
     });
   }
 
@@ -235,6 +240,43 @@ app.post("/api/vps/create", async (req, res) => {
     console.error("VPS provisioning request failed:", error?.message || "unknown error");
     return res.status(502).json({ error: "Could not reach the VPS provider. Please try again later." });
   }
+});
+\n
+app.get("/api/admin/vps/servers", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
+  res.set("Vary", "Origin");
+  res.set("Cache-Control", "no-store");
+  const match = (req.get("authorization") || "").match(/^Bearer (.+)$/i);
+  if (!match) return res.status(401).json({ error: "Sign in with an administrator account." });
+  let user;
+  try { user = await admin.auth().verifyIdToken(match[1]); }
+  catch { return res.status(401).json({ error: "Your session is invalid or expired." }); }
+  if (!VPS_ADMIN_UIDS.has(user.uid)) return res.status(403).json({ error: "Admin access required." });
+  if (!HETZNER_API_TOKEN) return res.status(503).json({ error: "Provider token is not configured in Render." });
+  try {
+    const response = await fetch("https://api.hetzner.cloud/v1/servers?label_selector=managed_by%3Dhellhost", {
+      headers: { Authorization: `Bearer ${HETZNER_API_TOKEN}` }
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) return res.status(502).json({ error: "Could not fetch VPS list from the provider." });
+    return res.json({ servers: (data.servers || []).map(server => ({
+      id: server.id, name: server.name, status: server.status,
+      ipv4: server.public_net?.ipv4?.ip || null,
+      datacenter: server.datacenter?.location?.name || server.datacenter?.name || "Unknown",
+      created: server.created
+    })) });
+  } catch (error) {
+    console.error("Admin VPS list failed:", error?.message || "unknown");
+    return res.status(502).json({ error: "Provider API is unreachable." });
+  }
+});
+
+app.options("/api/admin/vps/servers", (req, res) => {
+  res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
+  res.set("Vary", "Origin");
+  res.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
+  res.sendStatus(204);
 });
 \napp.use((_req, res) => res.status(404).send("Not found"));
 
