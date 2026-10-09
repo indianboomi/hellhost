@@ -127,7 +127,116 @@ if (window.opener) {
   }
 });
 
-app.use((_req, res) => res.status(404).send("Not found"));
+
+// VPS provisioning API. Keep disabled until billing, limits, and abuse controls are configured.
+// Required environment variables to enable: HETZNER_API_TOKEN and VPS_PROVISIONING_ENABLED=true.
+const VPS_PROVISIONING_ENABLED = process.env.VPS_PROVISIONING_ENABLED === "true";
+const HETZNER_API_TOKEN = process.env.HETZNER_API_TOKEN || "";
+const allowedFrontendOrigin = FRONTEND_ORIGIN;
+
+app.options("/api/vps/create", (req, res) => {
+  res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
+  res.set("Vary", "Origin");
+  res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
+  res.sendStatus(204);
+});
+
+app.post("/api/vps/create", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
+  res.set("Vary", "Origin");
+  res.set("Cache-Control", "no-store");
+  res.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
+
+  const authHeader = req.get("authorization") || "";
+  const match = authHeader.match(/^Bearer (.+)$/i);
+  if (!match) return res.status(401).json({ error: "Sign in to configure a VPS." });
+
+  let user;
+  try {
+    user = await admin.auth().verifyIdToken(match[1]);
+  } catch {
+    return res.status(401).json({ error: "Your session is invalid or expired. Please sign in again." });
+  }
+
+  if (!VPS_PROVISIONING_ENABLED || !HETZNER_API_TOKEN) {
+    return res.status(503).json({
+      error: "VPS setup preview is ready, but live provisioning is disabled until billing, account limits, and provider credentials are configured."
+    });
+  }
+
+  const { os, hostname, region, size, sshKey } = req.body || {};
+  const safeHostname = typeof hostname === "string" ? hostname.trim().toLowerCase() : "";
+  if (!/^[a-z0-9][a-z0-9.-]{1,38}[a-z0-9]$/.test(safeHostname)) {
+    return res.status(400).json({ error: "Use a hostname with 3–40 letters, numbers, dots, or hyphens." });
+  }
+
+  // Deliberate allowlists: client input never selects arbitrary provider resources.
+  const images = {
+    "Ubuntu 24.04 LTS": "ubuntu-24.04",
+    "Ubuntu 22.04 LTS": "ubuntu-22.04",
+    "Debian 12": "debian-12"
+  };
+  const serverTypes = {
+    Fire: "cx23",
+    Inferno: "cx33",
+    Hellfire: "cx43"
+  };
+  const locations = {
+    Germany: "fsn1",
+    Finland: "hel1",
+    "United States": "ash"
+  };
+  if (!images[os] || !serverTypes[size] || !locations[region]) {
+    return res.status(400).json({ error: "Choose a supported operating system, size, and region." });
+  }
+
+  let sshKeyId;
+  if (typeof sshKey === "string" && sshKey.trim()) {
+    // Hetzner expects an existing SSH key ID; accepting arbitrary key creation needs
+    // a separate ownership and lifecycle workflow. Do not silently ignore pasted keys.
+    return res.status(400).json({ error: "SSH key import is not connected yet. Leave the SSH field empty for this setup preview." });
+  }
+
+  try {
+    const response = await fetch("https://api.hetzner.cloud/v1/servers", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${HETZNER_API_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: safeHostname,
+        server_type: serverTypes[size],
+        image: images[os],
+        location: locations[region],
+        start_after_create: true,
+        labels: { managed_by: "hellhost", owner_uid: String(user.uid).slice(0, 63) }
+      })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      console.error("VPS provider request failed:", response.status, data?.error?.code || "unknown");
+      return res.status(502).json({ error: "The VPS provider could not create this server. Check provider account limits and configuration." });
+    }
+    const server = data.server || {};
+    return res.status(201).json({
+      id: server.id,
+      name: server.name,
+      status: server.status,
+      ipv4: server.public_net?.ipv4?.ip || null,
+      ipv6: server.public_net?.ipv6?.ip || null,
+      region,
+      os,
+      size,
+      message: "VPS created by the provider. Review its status and access settings in your provider console."
+    });
+  } catch (error) {
+    console.error("VPS provisioning request failed:", error?.message || "unknown error");
+    return res.status(502).json({ error: "Could not reach the VPS provider. Please try again later." });
+  }
+});
+\napp.use((_req, res) => res.status(404).send("Not found"));
 
 const port = Number(process.env.PORT || 10000);
 app.listen(port, "0.0.0.0", () => console.log(`Hell Host Discord auth listening on ${port}`));
