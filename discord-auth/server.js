@@ -99,6 +99,9 @@ app.get("/auth/discord/callback", async (req, res) => {
     });
     const displayName = String(profile.global_name || profile.username || "Discord user")
       .replace(/[<>]/g, "").slice(0, 80);
+    const avatarUrl = profile.avatar
+      ? `https://cdn.discordapp.com/avatars/${encodeURIComponent(profile.id)}/${encodeURIComponent(profile.avatar)}.${String(profile.avatar).startsWith("a_") ? "gif" : "png"}?size=128`
+      : "";
 
     res.set({
       "Cache-Control": "no-store",
@@ -112,7 +115,8 @@ if (window.opener) {
   window.opener.postMessage({
     type: "hellhost-discord-auth",
     token: ${JSON.stringify(customToken)},
-    displayName: ${JSON.stringify(displayName)}
+    displayName: ${JSON.stringify(displayName)},
+    avatarUrl: ${JSON.stringify(avatarUrl)}
   }, ${JSON.stringify(FRONTEND_ORIGIN)});
   window.close();
 }
