@@ -182,7 +182,7 @@ app.post("/api/minecraft/renew", auth, async (req, res, next) => {
     if (expiry > Date.now() + 24 * 60 * 60 * 1000) {
       return res.status(409).json({ error: "Renewal opens 24 hours before your trial expires." });
     }
-    if (record.status === "expired" || expiry <= Date.now()) {
+    if (record.status === "expired") {
       await ptero("/servers/" + encodeURIComponent(record.serverId) + "/unsuspend", "POST");
     }
     const trialExpiresAt = timestampIn30Days();
