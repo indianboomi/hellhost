@@ -1,0 +1,24 @@
+name: Suspend expired Minecraft trials
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+jobs:
+  expire-trials:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask Hell Host backend to suspend expired trials
+        env:
+          BACKEND_URL: ${{ secrets.HELLHOST_BACKEND_URL }}
+          CRON_SECRET: ${{ secrets.HELLHOST_CRON_SECRET }}
+        run: |
+          set -eu
+          if [ -z "${BACKEND_URL:-}" ] || [ -z "${CRON_SECRET:-}" ]; then
+            echo "Missing HELLHOST_BACKEND_URL or HELLHOST_CRON_SECRET repository Actions secret."
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error \
+            --request POST "${BACKEND_URL%/}/api/cron/expire" \
+            --header "Authorization: Bearer ${CRON_SECRET}" \
+            --header "Content-Type: application/json"
+          echo
