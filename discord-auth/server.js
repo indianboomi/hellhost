@@ -316,8 +316,8 @@ app.get("/api/admin/vps/status", async (req, res) => {
   catch { return res.status(401).json({ error: "Your session is invalid or expired." }); }
   if (!isVpsOwner(user) && !await isVpsAdmin(user)) return res.status(403).json({ error: "Owner/admin access required." });
   return res.json({
-    owner: isVpsOwner(user.uid),
-    admin: isVpsAdmin(user.uid),
+    owner: isVpsOwner(user),
+    admin: await isVpsAdmin(user),
     providerConfigured: Boolean(HETZNER_API_TOKEN),
     provisioningEnabled: VPS_PROVISIONING_ENABLED && Boolean(HETZNER_API_TOKEN)
   });
@@ -332,7 +332,7 @@ app.get("/api/admin/vps/servers", async (req, res) => {
   let user;
   try { user = await admin.auth().verifyIdToken(match[1]); }
   catch { return res.status(401).json({ error: "Your session is invalid or expired." }); }
-  if (!canManageVps(user.uid)) return res.status(403).json({ error: "Owner/admin access required." });
+  if (!isVpsOwner(user) && !await isVpsAdmin(user)) return res.status(403).json({ error: "Owner/admin access required." });
   if (!HETZNER_API_TOKEN) return res.status(503).json({ error: "Provider token is not configured in Render." });
   try {
     const response = await fetch("https://api.hetzner.cloud/v1/servers?label_selector=managed_by%3Dhellhost", {
