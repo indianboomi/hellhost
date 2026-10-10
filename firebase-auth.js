@@ -51,7 +51,7 @@ window.login = async function(event) {
   showMessage("login-message", "Signing in…");
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    location.href = "index.html";
+    location.href = "panel.html";
   } catch (error) {
     showMessage("login-message", friendlyError(error));
   } finally {
@@ -73,7 +73,7 @@ window.signup = async function(event) {
   showMessage("signup-message", "Creating your account…");
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-    location.href = "index.html";
+    location.href = "panel.html";
   } catch (error) {
     showMessage("signup-message", friendlyError(error));
   } finally {
@@ -116,7 +116,7 @@ window.startOAuth = async function(providerName) {
           await updateProfile(credential.user, { displayName: String(event.data.displayName).slice(0, 80), ...(typeof event.data.avatarUrl === "string" && event.data.avatarUrl.startsWith("https://cdn.discordapp.com/") ? { photoURL: event.data.avatarUrl } : {}) });
         }
         if (discordPopup && !discordPopup.closed) discordPopup.close();
-        location.href = "index.html";
+        location.href = "panel.html";
       } catch (error) {
         showMessage(messageId, friendlyError(error));
       }
@@ -146,7 +146,7 @@ window.logout = async function(event) {
   if (event) event.preventDefault();
   try {
     await signOut(auth);
-    location.href = "index.html";
+    location.href = "panel.html";
   } catch (error) {
     alert("Could not log out: " + friendlyError(error));
   }
@@ -182,6 +182,6 @@ onAuthStateChanged(auth, user => {
     }
   }
   if (user && (location.pathname.endsWith("/login.html") || location.pathname.endsWith("/signup.html"))) {
-    location.replace("index.html");
+    location.replace("panel.html");
   }
 });
