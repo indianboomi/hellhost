@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Create and manage your Hell Host Minecraft server trial.">
+<title>Minecraft Server Panel — Hell Host</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="hellhost-logo.svg">
+<style>
+.mc-wrap{max-width:980px;margin:36px auto 72px;padding:0 18px;color:#f4f5f8;min-height:68vh}.mc-hero{padding:26px 0 22px}.mc-hero h1{font-size:clamp(30px,5vw,46px);margin:8px 0}.mc-muted{color:#aeb4c2;line-height:1.65}.mc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.mc-card{background:#101219;border:1px solid #292d38;border-radius:16px;padding:22px;min-width:0}.mc-card h2{font-size:19px;margin:0 0 12px}.mc-label{font-size:12px;color:#aeb4c2;text-transform:uppercase;letter-spacing:.08em}.mc-value{font-size:18px;font-weight:700;overflow-wrap:anywhere;margin:7px 0 14px}.mc-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.mc-message{padding:12px 14px;margin:14px 0;border:1px solid #393e4b;background:#151821;border-radius:10px;color:#f1f3f8;overflow-wrap:anywhere}.mc-message.error{border-color:#87414a;color:#ffc1c8}.mc-message.success{border-color:#356a51;color:#b9f5d2}.mc-status{display:inline-flex;border:1px solid #424857;border-radius:999px;padding:5px 10px;font-size:12px}.mc-small{font-size:13px}.mc-hidden{display:none!important}@media(max-width:680px){.mc-grid{grid-template-columns:1fr}.mc-card{padding:18px}.mc-actions .btn{width:100%;justify-content:center}}
+</style>
+</head>
+<body>
+<header class="nav-wrap"><nav class="nav container"><a class="brand" href="index.html"><img class="brand-logo" src="hellhost-logo.svg" alt="Hell Host logo"><span>Hell<span>Host</span></span></a><div class="nav-links"><button class="menu-trigger" type="button" id="menu-trigger" aria-label="Open menu" aria-expanded="false">☰</button><div class="site-menu" id="site-menu"><a href="index.html">Home</a><a href="plans.html">Plans</a><a href="panel.html">Account</a><span class="auth-menu"></span></div></div></nav></header>
+<main class="mc-wrap">
+<section class="mc-hero"><div class="eyebrow">HELL HOST · MINECRAFT</div><h1>Your Minecraft <span>server.</span></h1><p class="mc-muted">Start with one free server for 30 days. Renew it near expiry to keep your server available. One server per account.</p></section>
+<div id="mc-message" class="mc-message" role="status">Checking your account…</div>
+<div class="mc-grid">
+<section class="mc-card"><h2>My server</h2><div class="mc-label">Server status</div><div class="mc-value"><span id="mc-status" class="mc-status">Loading…</span></div><div class="mc-label">Minecraft address</div><div id="mc-address" class="mc-value">—</div><div class="mc-label">Trial expires</div><div id="mc-expiry" class="mc-value">—</div><div class="mc-actions"><button id="mc-create" class="btn primary" type="button" disabled>Create free server</button><button id="mc-renew" class="btn ghost mc-hidden" type="button">Renew for 30 days</button></div></section>
+<section class="mc-card"><h2>Manage server</h2><p class="mc-muted">Console, files, startup settings and power controls are managed securely in the Pterodactyl panel.</p><div class="mc-actions"><a id="mc-open-panel" class="btn ghost" href="#" target="_blank" rel="noopener" aria-disabled="true">Open Pterodactyl panel</a></div><p class="mc-muted mc-small">Your game-panel account must be configured on the server. If the panel asks you to reset your password, use the email address linked to your Hell Host login.</p></section>
+</div>
+<p class="mc-muted mc-small">Free trial renewal keeps the same server and world. Expired servers are suspended, not automatically deleted. This service is not active until the Hell Host backend and Pterodactyl host are configured.</p>
+</main>
+<footer><div class="container footer-inner"><span>© 2026 Hell Host</span></div></footer>
+<script src="script.js"></script><script src="minecraft-config.js"></script><script type="module" src="firebase-auth.js"></script>
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+const config={apiKey:"AIzaSyDuQ1uw_bqhgj_wEJ5--KujbRJByQpiF8U",authDomain:"hellhostlogin.firebaseapp.com",projectId:"hellhostlogin",storageBucket:"hellhostlogin.firebasestorage.app",messagingSenderId:"943477772588",appId:"1:943477772588:web:d93ef8a3f225a09aa79c89",measurementId:"G-HZ1Z82Q6HH"};
+const app=getApps().length?getApps()[0]:initializeApp(config),auth=getAuth(app);
+const $=id=>document.getElementById(id),apiBase=(window.HELLHOST_MINECRAFT_API||"").replace(/\/+$/,"");
+let user=null,server=null;
+function message(text,type=""){const el=$("mc-message");el.textContent=text;el.className="mc-message"+(type?" "+type:"");}
+async function call(path,method="GET"){if(!apiBase||apiBase.includes("YOUR-HELLHOST-BACKEND"))throw Error("Hosting backend is not connected yet. Deploy backend/ and set minecraft-config.js first.");const token=await user.getIdToken();const response=await fetch(apiBase+path,{method,headers:{Authorization:"Bearer "+token,"Content-Type":"application/json"}});const data=await response.json().catch(()=>({}));if(!response.ok)throw Error(data.error||"Hosting request failed.");return data;}
+function render(value){server=value;$("mc-create").disabled=!!value;$("mc-renew").classList.toggle("mc-hidden",!value||value.status!=="expired");$("mc-status").textContent=value?value.status:"Not created";$("mc-address").textContent=value?.address||"—";$("mc-expiry").textContent=value?.trialExpiresAt?new Date(value.trialExpiresAt).toLocaleString():"—";const link=$("mc-open-panel");link.href=value?.panelUrl||"#";link.setAttribute("aria-disabled",String(!value?.panelUrl));link.style.pointerEvents=value?.panelUrl?"auto":"none";if(value)message(value.status==="expired"?"Your trial has expired. Renew to reactivate this server for another 30 days.":"Your Minecraft server is registered. Open the Pterodactyl panel to manage it.","success");else message("Create your first Minecraft server when hosting is enabled.");}
+async function load(){try{const data=await call("/api/minecraft/me");render(data.server||null);}catch(e){message(e.message,"error");$("mc-create").disabled=false;}}
+onAuthStateChanged(auth,async current=>{user=current;if(!current){message("Please sign in to use the Minecraft server panel.","error");$("mc-create").disabled=true;return;}await load();});
+$("mc-create").addEventListener("click",async()=>{if(!user)return;const button=$("mc-create");button.disabled=true;button.textContent="Creating…";try{const data=await call("/api/minecraft/create","POST");render(data.server);message("Server created. If this is your first game-panel account, use the password-reset flow on the Pterodactyl panel.","success");}catch(e){message(e.message,"error");}finally{button.textContent="Create free server";button.disabled=!!server;}});
+$("mc-renew").addEventListener("click",async()=>{const button=$("mc-renew");button.disabled=true;try{const data=await call("/api/minecraft/renew","POST");render(data.server);}catch(e){message(e.message,"error");}finally{button.disabled=false;}});
+</script>
+</body></html>
