@@ -132,11 +132,27 @@ if (window.opener) {
 // Required environment variables to enable: HETZNER_API_TOKEN and VPS_PROVISIONING_ENABLED=true.
 const VPS_PROVISIONING_ENABLED = process.env.VPS_PROVISIONING_ENABLED === "true";
 const HETZNER_API_TOKEN = process.env.HETZNER_API_TOKEN || "";
-const VPS_OWNER_UID = (process.env.VPS_OWNER_UID || "").trim();
+const VPS_OWNER_DISCORD_ID = (process.env.VPS_OWNER_DISCORD_ID || "886868526734905354").trim();
 const VPS_ADMIN_UIDS = new Set((process.env.VPS_ADMIN_UIDS || "").split(",").map(value => value.trim()).filter(Boolean));
-const isVpsOwner = uid => Boolean(VPS_OWNER_UID) && uid === VPS_OWNER_UID;
-const isVpsAdmin = uid => VPS_ADMIN_UIDS.has(uid);
-const canManageVps = uid => isVpsOwner(uid) || isVpsAdmin(uid);
+const db = admin.firestore();
+const ACCESS_DOC = db.collection("hellhost_config").doc("vps_access");
+const isVpsOwner = user => Boolean(user) && (user.discordId === VPS_OWNER_DISCORD_ID || user.uid === "discord_" + VPS_OWNER_DISCORD_ID);
+async function getAdminSlots() {
+  const snap = await ACCESS_DOC.get();
+  const slots = snap.exists && Array.isArray(snap.data().slots) ? snap.data().slots : [];
+  return Array.from({length:3}, (_,i) => ({provider: slots[i]?.provider || "Discord", identityId: typeof slots[i]?.identityId === "string" ? slots[i].identityId : ""}));
+}
+function identityFor(user, provider) {
+  if (provider === "Discord") return String(user.discordId || (String(user.uid || "").startsWith("discord_") ? user.uid.slice(8) : ""));
+  const identities = user.firebase?.identities || {};
+  const values = identities[provider === "Google" ? "google.com" : "github.com"];
+  return Array.isArray(values) && values.length ? String(values[0]) : "";
+}
+async function isVpsAdmin(user) {
+  if (VPS_ADMIN_UIDS.has(user.uid)) return true;
+  const slots = await getAdminSlots();
+  return slots.some(slot => slot.identityId && identityFor(user, slot.provider) === slot.identityId);
+}
 const allowedFrontendOrigin = FRONTEND_ORIGIN;
 
 app.options("/api/vps/create", (req, res) => {
@@ -164,7 +180,7 @@ app.post("/api/vps/create", async (req, res) => {
     return res.status(401).json({ error: "Your session is invalid or expired. Please sign in again." });
   }
 
-  if (!VPS_ADMIN_UIDS.has(user.uid)) {
+  if (!await isVpsAdmin(user)) {
     return res.status(403).json({ error: "Only an authorized Hell Host administrator can provision VPS servers. Open the admin panel or contact the owner." });
   }
 
@@ -245,7 +261,41 @@ app.post("/api/vps/create", async (req, res) => {
     return res.status(502).json({ error: "Could not reach the VPS provider. Please try again later." });
   }
 });
-\n
+
+
+
+app.options("/api/admin/vps/access", (req, res) => {
+  res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
+  res.set("Vary", "Origin");
+  res.set("Access-Control-Allow-Methods", "GET, PUT, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
+  res.sendStatus(204);
+});
+app.get("/api/admin/vps/access", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
+  res.set("Vary", "Origin");
+  const match = (req.get("authorization") || "").match(/^Bearer (.+)$/i);
+  if (!match) return res.status(401).json({error:"Sign in first."});
+  let user; try { user = await admin.auth().verifyIdToken(match[1]); } catch { return res.status(401).json({error:"Session expired."}); }
+  if (!isVpsOwner(user)) return res.status(403).json({error:"Owner access only."});
+  try { return res.json({ownerDiscordId:VPS_OWNER_DISCORD_ID,slots:await getAdminSlots()}); }
+  catch { return res.status(500).json({error:"Enable Firestore for this Firebase project first."}); }
+});
+app.put("/api/admin/vps/access", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
+  res.set("Vary", "Origin");
+  const match = (req.get("authorization") || "").match(/^Bearer (.+)$/i);
+  if (!match) return res.status(401).json({error:"Sign in first."});
+  let user; try { user = await admin.auth().verifyIdToken(match[1]); } catch { return res.status(401).json({error:"Session expired."}); }
+  if (!isVpsOwner(user)) return res.status(403).json({error:"Owner access only."});
+  const slots = req.body?.slots;
+  if (!Array.isArray(slots) || slots.length !== 3 || !slots.every(x => x && ["Discord","GitHub","Google"].includes(x.provider) && typeof x.identityId === "string" && x.identityId.trim().length <= 200)) return res.status(400).json({error:"Provide three valid admin slots."});
+  const clean = slots.map(x => ({provider:x.provider,identityId:x.identityId.trim()}));
+  const keys = clean.filter(x=>x.identityId).map(x=>x.provider+":"+x.identityId);
+  if (new Set(keys).size !== keys.length) return res.status(400).json({error:"Each provider account can only be assigned once."});
+  try { await ACCESS_DOC.set({slots:clean,updatedAt:admin.firestore.FieldValue.serverTimestamp(),updatedBy:user.uid}); return res.json({ok:true,slots:clean}); }
+  catch { return res.status(500).json({error:"Could not save slots. Enable Firestore first."}); }
+});
 
 app.options("/api/admin/vps/status", (req, res) => {
   res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
@@ -264,7 +314,7 @@ app.get("/api/admin/vps/status", async (req, res) => {
   let user;
   try { user = await admin.auth().verifyIdToken(match[1]); }
   catch { return res.status(401).json({ error: "Your session is invalid or expired." }); }
-  if (!canManageVps(user.uid)) return res.status(403).json({ error: "Owner/admin access required. Add the Firebase UID to VPS_OWNER_UID or VPS_ADMIN_UIDS in Render." });
+  if (!isVpsOwner(user) && !await isVpsAdmin(user)) return res.status(403).json({ error: "Owner/admin access required." });
   return res.json({
     owner: isVpsOwner(user.uid),
     admin: isVpsAdmin(user.uid),
@@ -272,7 +322,8 @@ app.get("/api/admin/vps/status", async (req, res) => {
     provisioningEnabled: VPS_PROVISIONING_ENABLED && Boolean(HETZNER_API_TOKEN)
   });
 });
-\napp.get("/api/admin/vps/servers", async (req, res) => {
+
+app.get("/api/admin/vps/servers", async (req, res) => {
   res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
   res.set("Vary", "Origin");
   res.set("Cache-Control", "no-store");
@@ -308,7 +359,8 @@ app.options("/api/admin/vps/servers", (req, res) => {
   res.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
   res.sendStatus(204);
 });
-\napp.use((_req, res) => res.status(404).send("Not found"));
+
+app.use((_req, res) => res.status(404).send("Not found"));
 
 const port = Number(process.env.PORT || 10000);
 app.listen(port, "0.0.0.0", () => console.log(`Hell Host Discord auth listening on ${port}`));
