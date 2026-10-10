@@ -1,80 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Configure your Hell Host virtual private server.">
-<title>Set Up a VPS — Hell Host</title>
-<link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/svg+xml" href="hellhost-logo.svg">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hell Host VPS hosting managed by the Hell Host team.">
+<title>VPS Hosting — Hell Host</title>
+<link rel="stylesheet" href="style.css"><link rel="icon" type="image/svg+xml" href="hellhost-logo.svg">
 <style>
-.vps-wrap{padding:48px 0 80px}.vps-heading{margin-bottom:30px}.vps-heading h1{font-size:clamp(30px,5vw,44px);line-height:1.12;margin:8px 0 12px}.vps-heading p{color:#aeb4c2;max-width:650px;margin:0}.vps-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(270px,.8fr);gap:22px;align-items:start}.vps-card{background:#101219;border:1px solid #272b36;border-radius:16px;padding:24px;margin-bottom:18px}.vps-card h2{font-size:18px;margin:0 0 5px}.vps-sub{font-size:13px;color:#9ca3b3;margin:0 0 20px}.vps-field{display:block;font-size:13px;color:#d9dce5;margin:0 0 8px;font-weight:650}.vps-select,.vps-input{width:100%;background:#0a0c11;color:#f5f7fb;border:1px solid #343947;border-radius:9px;padding:12px;font:inherit;min-height:45px}.vps-select:focus,.vps-input:focus{outline:2px solid #ff4b5c;outline-offset:1px}.vps-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.vps-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.vps-option{position:relative}.vps-option input{position:absolute;opacity:0;pointer-events:none}.vps-option label{display:block;height:100%;padding:13px;background:#0a0c11;border:1px solid #343947;border-radius:10px;cursor:pointer}.vps-option input:checked+label{border-color:#ff4b5c;background:#251116;box-shadow:inset 0 0 0 1px #ff4b5c}.vps-option strong{display:block;font-size:14px}.vps-option small{display:block;color:#aeb4c2;font-size:12px;margin-top:3px}.vps-summary{position:sticky;top:95px}.vps-summary h2{margin-bottom:18px}.vps-summary-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #282c36;font-size:13px}.vps-summary-row span{color:#aeb4c2}.vps-summary-row strong{text-align:right}.vps-total{display:flex;justify-content:space-between;align-items:baseline;padding:18px 0 6px}.vps-total strong{font-size:25px}.vps-note{font-size:12px;color:#9ca3b3;line-height:1.55}.vps-status{display:none;margin-top:14px;border:1px solid #8b622c;background:#241b10;border-radius:9px;padding:12px;color:#ffdba5;font-size:13px}.vps-create{width:100%;border:0;cursor:pointer;margin:12px 0}.vps-pill{display:inline-block;background:#28202a;color:#ff9aa5;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:700}.vps-security{display:flex;gap:10px;color:#9ca3b3;font-size:12px;margin-top:14px}.vps-security span:first-child{color:#81d9a0}@media(max-width:800px){.vps-layout{grid-template-columns:1fr}.vps-summary{position:static}.vps-options{grid-template-columns:1fr 1fr}}@media(max-width:480px){.vps-wrap{padding-top:30px}.vps-card{padding:18px}.vps-grid{grid-template-columns:1fr}.vps-options{grid-template-columns:1fr 1fr}.container{width:min(100% - 28px,1120px)}}
-</style>
-</head>
+.vps-page{padding:64px 0 90px}.vps-hero{max-width:760px;margin:0 auto 30px;text-align:center}.vps-hero h1{font-size:clamp(32px,6vw,54px);line-height:1.1;margin:12px 0}.vps-hero p{color:#aeb4c2;font-size:16px}.vps-panel{max-width:850px;margin:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.vps-tile{background:#101219;border:1px solid #272b36;border-radius:15px;padding:22px}.vps-tile .emoji{font-size:25px}.vps-tile h2{font-size:17px;margin:12px 0 6px}.vps-tile p{font-size:13px;color:#aeb4c2;margin:0}.vps-managed{max-width:850px;margin:18px auto 0;padding:22px;border:1px solid #343947;background:#101219;border-radius:15px;display:flex;align-items:center;justify-content:space-between;gap:20px}.vps-managed p{margin:5px 0 0;color:#aeb4c2;font-size:13px}.vps-actions{display:flex;gap:10px;flex-wrap:wrap}@media(max-width:700px){.vps-panel{grid-template-columns:1fr}.vps-managed{align-items:flex-start;flex-direction:column}.vps-page{padding-top:36px}}
+</style></head>
 <body>
-<header class="nav-wrap"><nav class="nav container"><a class="brand" href="index.html"><img class="brand-logo" src="hellhost-logo.svg" alt="Hell Host logo"><span>Hell<span>Host</span></span></a><div class="nav-links"><button class="menu-trigger" type="button" id="menu-trigger" aria-label="Open menu" aria-expanded="false">☰</button><div class="site-menu" id="site-menu"><a href="index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="vps.html" class="active">VPS Setup</a><span class="auth-menu"></span></div></div></nav></header>
-<main class="vps-wrap container">
-<div class="vps-heading"><div class="eyebrow">HELL HOST · VPS CONTROL</div><h1>Configure your <span style="color:#ff4b5c">VPS.</span></h1><p>Choose an operating system, region, and resources. Review your configuration before deploying.</p></div>
-<form id="vps-form" class="vps-layout">
-<div>
-<section class="vps-card"><h2>01 · Operating system</h2><p class="vps-sub">Select the system you want installed.</p><div class="vps-grid"><div><label class="vps-field" for="vps-os">OS image</label><select class="vps-select" id="vps-os"><option>Ubuntu 24.04 LTS</option><option>Ubuntu 22.04 LTS</option><option>Debian 12</option></select></div><div><label class="vps-field" for="vps-hostname">Server hostname</label><input class="vps-input" id="vps-hostname" maxlength="40" value="hellhost-vps" pattern="[A-Za-z0-9][A-Za-z0-9.-]*" required></div></div></section>
-<section class="vps-card"><h2>02 · Choose a region</h2><p class="vps-sub">Pick a nearby data-center location.</p><div class="vps-grid"><div><label class="vps-field" for="vps-region">Data center</label><select class="vps-select" id="vps-region"><option value="Germany">Germany (Falkenstein)</option><option value="Finland">Finland (Helsinki)</option><option value="United States">United States (Ashburn)</option></select></div><div><label class="vps-field" for="vps-purpose">Primary use</label><select class="vps-select" id="vps-purpose"><option>Web app / website</option><option>Game server</option><option>Bot / automation</option><option>Database</option><option>Development / testing</option></select></div></div></section>
-<section class="vps-card"><h2>03 · Compute resources</h2><p class="vps-sub">Select a configuration for your workload.</p><div class="vps-options">
-<div class="vps-option"><input type="radio" id="size-fire" name="vps-size" value="Fire" data-ram="2 GB" data-cpu="2 vCPU" data-disk="30 GB NVMe" data-price="₹399" checked><label for="size-fire"><strong>🔥 Fire</strong><small>2 GB RAM</small><small>2 vCPU</small><small>30 GB NVMe</small></label></div>
-<div class="vps-option"><input type="radio" id="size-inferno" name="vps-size" value="Inferno" data-ram="4 GB" data-cpu="2 vCPU" data-disk="60 GB NVMe" data-price="₹799"><label for="size-inferno"><strong>🌋 Inferno</strong><small>4 GB RAM</small><small>2 vCPU</small><small>60 GB NVMe</small></label></div>
-<div class="vps-option"><input type="radio" id="size-hellfire" name="vps-size" value="Hellfire" data-ram="8 GB" data-cpu="4 vCPU" data-disk="100 GB NVMe" data-price="₹1,499"><label for="size-hellfire"><strong>⚡ Hellfire</strong><small>8 GB RAM</small><small>4 vCPU</small><small>100 GB NVMe</small></label></div>
-</div><p class="vps-note" style="margin-top:14px">Displayed prices are draft estimates for the setup preview, not active offers. Final prices depend on your infrastructure provider.</p></section>
-<section class="vps-card"><h2>04 · Secure access</h2><p class="vps-sub">Use an SSH public key for safer Linux access. Never enter a private key here.</p><label class="vps-field" for="vps-ssh">SSH public key (not connected yet)</label><textarea class="vps-input" id="vps-ssh" rows="3" placeholder="ssh-ed25519 AAAA... your-device"></textarea><p class="vps-note">Paste only your public key. Private keys and account passwords should never be submitted here.</p></section>
-</div>
-<aside class="vps-card vps-summary"><span class="vps-pill">SETUP PREVIEW</span><h2 style="margin-top:12px">Your configuration</h2><div class="vps-summary-row"><span>Plan</span><strong id="sum-plan">Fire</strong></div><div class="vps-summary-row"><span>Operating system</span><strong id="sum-os">Ubuntu 24.04 LTS</strong></div><div class="vps-summary-row"><span>Region</span><strong id="sum-region">Germany</strong></div><div class="vps-summary-row"><span>CPU</span><strong id="sum-cpu">2 vCPU</strong></div><div class="vps-summary-row"><span>Memory</span><strong id="sum-ram">2 GB</strong></div><div class="vps-summary-row"><span>Storage</span><strong id="sum-disk">30 GB NVMe</strong></div><div class="vps-total"><span>Est. monthly</span><strong id="sum-price">₹399</strong></div><p class="vps-note">This is a configuration preview only. No payment will be taken and no server will be created yet.</p><button class="btn primary vps-create" type="submit">Review VPS setup →</button><div id="vps-status" class="vps-status" role="status"></div><div class="vps-security"><span>✓</span><span>SSH public key only. Never share your private key.</span></div></aside>
-</form>
+<header class="nav-wrap"><nav class="nav container"><a class="brand" href="index.html"><img class="brand-logo" src="hellhost-logo.svg" alt="Hell Host logo"><span>Hell<span>Host</span></span></a><div class="nav-links"><button class="menu-trigger" type="button" id="menu-trigger" aria-label="Open menu" aria-expanded="false">☰</button><div class="site-menu" id="site-menu"><a href="index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="vps.html" class="active">VPS</a><span class="auth-menu"></span></div></div></nav></header>
+<main class="vps-page container">
+<section class="vps-hero"><div class="eyebrow">HELL HOST · VIRTUAL SERVERS</div><h1>Your VPS.<br><span style="color:#ff4b5c">Managed by Hell Host.</span></h1><p>Our admin team configures and provisions VPS machines from the secure control panel. Customer-facing VPS self-provisioning is not enabled.</p></section>
+<section class="vps-panel">
+<article class="vps-tile"><div class="emoji">🖥️</div><h2>Operating system</h2><p>Linux images can be selected by the admin when setting up a server.</p></article>
+<article class="vps-tile"><div class="emoji">⚙️</div><h2>Resources</h2><p>CPU, memory and storage are selected and checked before provisioning.</p></article>
+<article class="vps-tile"><div class="emoji">🔐</div><h2>Secure management</h2><p>Provider credentials stay on the backend, never in this public page.</p></article>
+</section>
+<section class="vps-managed"><div><strong>VPS provisioning is managed by the owner/admin.</strong><p>Need a VPS? Contact the Hell Host team. Authorized administrators can sign in to the private control panel.</p></div><div class="vps-actions"><a class="btn ghost" href="contact.html">Contact us</a><a class="btn primary" href="admin.html">Admin panel →</a></div></section>
 </main>
 <footer><div class="container footer-inner"><span>© 2026 Hell Host</span></div></footer>
 <script src="script.js"></script><script type="module" src="firebase-auth.js"></script>
-<script>
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyDuQ1uw_bqhgj_wEJ5--KujbRJByQpiF8U",
-  authDomain: "hellhostlogin.firebaseapp.com",
-  projectId: "hellhostlogin",
-  storageBucket: "hellhostlogin.firebasestorage.app",
-  messagingSenderId: "943477772588",
-  appId: "1:943477772588:web:d93ef8a3f225a09aa79c89",
-  measurementId: "G-HZ1Z82Q6HH"
-};
-const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const API_BASE = "https://hellhost-discord-auth.onrender.com";
-const form=document.getElementById('vps-form');
-const fields={os:document.getElementById('vps-os'),region:document.getElementById('vps-region'),hostname:document.getElementById('vps-hostname'),purpose:document.getElementById('vps-purpose')};
-const chosen=()=>document.querySelector('input[name="vps-size"]:checked');
-function updateSummary(){const p=chosen();document.getElementById('sum-plan').textContent=p.value;document.getElementById('sum-os').textContent=fields.os.value;document.getElementById('sum-region').textContent=fields.region.value;document.getElementById('sum-cpu').textContent=p.dataset.cpu;document.getElementById('sum-ram').textContent=p.dataset.ram;document.getElementById('sum-disk').textContent=p.dataset.disk;document.getElementById('sum-price').textContent=p.dataset.price;}
-form.addEventListener('change',updateSummary);
-form.addEventListener('submit',async event=>{
-  event.preventDefault();
-  const status=document.getElementById('vps-status');
-  status.style.display='block';
-  status.textContent='Checking sign-in and provisioning availability…';
-  const user=auth.currentUser;
-  if(!user){status.textContent='Please log in to your Hell Host account before continuing.';return;}
-  const p=chosen();
-  try{
-    const idToken=await user.getIdToken();
-    const response=await fetch(API_BASE+'/api/vps/create',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+idToken},
-      body:JSON.stringify({os:fields.os.value,region:fields.region.value,hostname:fields.hostname.value,size:p.value,sshKey:document.getElementById('vps-ssh').value.trim()})
-    });
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok) throw new Error(data.error||'VPS setup could not be completed.');
-    status.textContent='VPS created: '+data.name+' · status: '+data.status+' · IPv4: '+(data.ipv4||'pending')+'. '+data.message;
-  }catch(error){
-    status.textContent=error.message||'Could not reach the VPS API. Please try again later.';
-  }
-  status.scrollIntoView({behavior:'smooth',block:'nearest'});
-});
-updateSummary();
-</script>
-</body>
-</html>
+</body></html>
