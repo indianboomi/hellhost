@@ -165,7 +165,9 @@ onAuthStateChanged(auth, user => {
       const avatar = typeof user.photoURL === "string" && /^https:\/\//i.test(user.photoURL)
         ? '<img class="user-photo" src="' + escapeHtml(user.photoURL) + '" alt="" referrerpolicy="no-referrer">'
         : '<span class="user-icon">' + escapeHtml((label.trim()[0] || "H").toUpperCase()) + '</span>';
-      el.innerHTML = '<a class="user-link" href="index.html">' + avatar + ' <span class="user-name-nav">' + escapeHtml(label) + '</span></a><a class="logout-link" href="#" onclick="logout(event)"><span>🚪</span> Logout</a>';
+      const isHellHostOwner = user.uid === "discord_886868526734905354";
+      const ownerLink = isHellHostOwner ? '<a class="owner-nav" href="owner.html">👑 Owner Panel</a>' : '';
+      el.innerHTML = '<a class="user-link" href="index.html">' + avatar + ' <span class="user-name-nav">' + escapeHtml(label) + '</span></a>' + ownerLink + '<a class="logout-link" href="#" onclick="logout(event)"><span>🚪</span> Logout</a>';
     } else {
       el.innerHTML = '<a class="login-nav" href="login.html">Login</a>';
     }
