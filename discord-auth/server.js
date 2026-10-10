@@ -132,7 +132,11 @@ if (window.opener) {
 // Required environment variables to enable: HETZNER_API_TOKEN and VPS_PROVISIONING_ENABLED=true.
 const VPS_PROVISIONING_ENABLED = process.env.VPS_PROVISIONING_ENABLED === "true";
 const HETZNER_API_TOKEN = process.env.HETZNER_API_TOKEN || "";
+const VPS_OWNER_UID = (process.env.VPS_OWNER_UID || "").trim();
 const VPS_ADMIN_UIDS = new Set((process.env.VPS_ADMIN_UIDS || "").split(",").map(value => value.trim()).filter(Boolean));
+const isVpsOwner = uid => Boolean(VPS_OWNER_UID) && uid === VPS_OWNER_UID;
+const isVpsAdmin = uid => VPS_ADMIN_UIDS.has(uid);
+const canManageVps = uid => isVpsOwner(uid) || isVpsAdmin(uid);
 const allowedFrontendOrigin = FRONTEND_ORIGIN;
 
 app.options("/api/vps/create", (req, res) => {
@@ -260,9 +264,10 @@ app.get("/api/admin/vps/status", async (req, res) => {
   let user;
   try { user = await admin.auth().verifyIdToken(match[1]); }
   catch { return res.status(401).json({ error: "Your session is invalid or expired." }); }
-  if (!VPS_ADMIN_UIDS.has(user.uid)) return res.status(403).json({ error: "Admin access required. Add your Firebase UID to VPS_ADMIN_UIDS in Render." });
+  if (!canManageVps(user.uid)) return res.status(403).json({ error: "Owner/admin access required. Add the Firebase UID to VPS_OWNER_UID or VPS_ADMIN_UIDS in Render." });
   return res.json({
-    admin: true,
+    owner: isVpsOwner(user.uid),
+    admin: isVpsAdmin(user.uid),
     providerConfigured: Boolean(HETZNER_API_TOKEN),
     provisioningEnabled: VPS_PROVISIONING_ENABLED && Boolean(HETZNER_API_TOKEN)
   });
@@ -276,7 +281,7 @@ app.get("/api/admin/vps/status", async (req, res) => {
   let user;
   try { user = await admin.auth().verifyIdToken(match[1]); }
   catch { return res.status(401).json({ error: "Your session is invalid or expired." }); }
-  if (!VPS_ADMIN_UIDS.has(user.uid)) return res.status(403).json({ error: "Admin access required." });
+  if (!canManageVps(user.uid)) return res.status(403).json({ error: "Owner/admin access required." });
   if (!HETZNER_API_TOKEN) return res.status(503).json({ error: "Provider token is not configured in Render." });
   try {
     const response = await fetch("https://api.hetzner.cloud/v1/servers?label_selector=managed_by%3Dhellhost", {
