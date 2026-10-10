@@ -136,7 +136,7 @@ window.startOAuth = async function(providerName) {
   showMessage("login-message", "Opening " + providerName + " sign-in…");
   try {
     await signInWithPopup(auth, provider);
-    location.href = "index.html";
+    location.href = "panel.html";
   } catch (error) {
     showMessage("login-message", friendlyError(error));
   }
@@ -146,7 +146,7 @@ window.logout = async function(event) {
   if (event) event.preventDefault();
   try {
     await signOut(auth);
-    location.href = "panel.html";
+    location.href = "index.html";
   } catch (error) {
     alert("Could not log out: " + friendlyError(error));
   }
