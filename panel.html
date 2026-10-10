@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Your Hell Host account dashboard.">
+<title>Dashboard — Hell Host</title>
+<link rel="stylesheet" href="style.css"><link rel="icon" type="image/svg+xml" href="hellhost-logo.svg">
+<style>
+.dashboard{padding:38px 0 72px;min-height:70vh}.dash-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:28px}.dash-head h1{font-size:clamp(30px,5vw,44px);margin:6px 0}.dash-head p,.muted{color:#aeb4c2}.dash-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.dash-card{background:#101219;border:1px solid #292d38;border-radius:16px;padding:22px}.dash-icon{font-size:27px;margin-bottom:15px}.dash-card h2{font-size:18px;margin:0 0 8px}.dash-card p{font-size:14px;line-height:1.65;color:#aeb4c2}.dash-card .btn{margin-top:8px;display:inline-flex}.account-card{margin-top:18px;display:flex;align-items:center;gap:14px}.account-avatar{width:46px;height:46px;border-radius:50%;object-fit:cover;background:#292d38;display:grid;place-items:center;font-weight:800}.account-details{min-width:0}.account-details strong,.account-details span{display:block;overflow-wrap:anywhere}.account-details span{font-size:13px;color:#aeb4c2;margin-top:4px}.dash-tag{display:inline-block;border:1px solid #343947;border-radius:999px;padding:5px 9px;font-size:11px;color:#ffc1c8;margin-bottom:12px}@media(max-width:760px){.dash-grid{grid-template-columns:1fr}.dash-head{align-items:flex-start;flex-direction:column}.dash-card{padding:19px}}
+</style>
+</head>
+<body>
+<header class="nav-wrap"><nav class="nav container"><a class="brand" href="index.html"><img class="brand-logo" src="hellhost-logo.svg" alt="Hell Host logo"><span>Hell<span>Host</span></span></a><div class="nav-links"><button class="menu-trigger" type="button" id="menu-trigger" aria-label="Open menu" aria-expanded="false">☰</button><div class="site-menu" id="site-menu"><a href="index.html">Home</a><a href="plans.html">Plans</a><a href="about.html">About</a><span class="auth-menu"></span></div></div></nav></header>
+<main class="dashboard container">
+<div class="dash-head"><div><div class="eyebrow">HELL HOST · YOUR SPACE</div><h1>Welcome to your <span>panel.</span></h1><p class="muted">Manage your account and get started with your game server.</p></div><a class="btn primary" href="plans.html">Explore hosting plans →</a></div>
+<div class="dash-grid">
+<section class="dash-card"><div class="dash-icon">🎮</div><span class="dash-tag">GET STARTED</span><h2>Your game servers</h2><p>Your server list will appear here when server purchasing and customer-server management are connected.</p><a class="btn ghost" href="plans.html">Choose a plan</a></section>
+<section class="dash-card"><div class="dash-icon">🔥</div><span class="dash-tag">HOSTING</span><h2>Find your plan</h2><p>Compare available Hell Host plans and choose the resources that fit your community.</p><a class="btn ghost" href="plans.html">View plans</a></section>
+<section class="dash-card"><div class="dash-icon">👤</div><span class="dash-tag">ACCOUNT</span><h2>Account details</h2><p>You're signed in. Your profile details are shown below.</p><a class="btn ghost" href="index.html">Visit website</a></section>
+</div>
+<section class="dash-card account-card"><div id="account-avatar" class="account-avatar">H</div><div class="account-details"><strong id="account-name">Loading account…</strong><span id="account-email">Checking sign-in status…</span></div></section>
+</main>
+<footer><div class="container footer-inner"><span>© 2026 Hell Host</span></div></footer>
+<script src="script.js"></script><script type="module" src="firebase-auth.js"></script>
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+const config={apiKey:"AIzaSyDuQ1uw_bqhgj_wEJ5--KujbRJByQpiF8U",authDomain:"hellhostlogin.firebaseapp.com",projectId:"hellhostlogin",storageBucket:"hellhostlogin.firebasestorage.app",messagingSenderId:"943477772588",appId:"1:943477772588:web:d93ef8a3f225a09aa79c89",measurementId:"G-HZ1Z82Q6HH"};
+const app=getApps().length?getApps()[0]:initializeApp(config);const auth=getAuth(app);
+onAuthStateChanged(auth,user=>{if(!user){location.replace("login.html");return;}const label=user.displayName||(user.email?user.email.split("@")[0]:"Hell Host user");document.getElementById("account-name").textContent=label;document.getElementById("account-email").textContent=user.email||"Signed in with Discord";const avatar=document.getElementById("account-avatar");if(user.photoURL){avatar.innerHTML="";const img=document.createElement("img");img.src=user.photoURL;img.alt="";img.className="account-avatar";avatar.replaceWith(img);}else avatar.textContent=(label.trim()[0]||"H").toUpperCase();});
+</script>
+</body></html>
