@@ -9,7 +9,7 @@ Responsive dark hosting website for **Hell Host**.
 - Login — `login.html`
 - Sign up — `signup.html`
 - Game hosting plans — `plans.html` (kept separate from VPS management)
-- Owner/admin VPS control panel — `admin.html`
+- Owner/admin VPS control panel — `admin.html`\n- Minecraft server trial panel — `minecraft.html` (requires a configured backend and Pterodactyl host)\n- Pterodactyl setup guide — `PTERODACTYL-SETUP.md`\n- Secure Firebase/Pterodactyl API bridge — `backend/`
 
 There is no customer-facing `vps.html` page. VPS provisioning is handled from the owner/admin control panel.
 
