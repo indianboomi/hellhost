@@ -242,7 +242,32 @@ app.post("/api/vps/create", async (req, res) => {
   }
 });
 \n
-app.get("/api/admin/vps/servers", async (req, res) => {
+
+app.options("/api/admin/vps/status", (req, res) => {
+  res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
+  res.set("Vary", "Origin");
+  res.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
+  res.sendStatus(204);
+});
+
+app.get("/api/admin/vps/status", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
+  res.set("Vary", "Origin");
+  res.set("Cache-Control", "no-store");
+  const match = (req.get("authorization") || "").match(/^Bearer (.+)$/i);
+  if (!match) return res.status(401).json({ error: "Sign in with an administrator account." });
+  let user;
+  try { user = await admin.auth().verifyIdToken(match[1]); }
+  catch { return res.status(401).json({ error: "Your session is invalid or expired." }); }
+  if (!VPS_ADMIN_UIDS.has(user.uid)) return res.status(403).json({ error: "Admin access required. Add your Firebase UID to VPS_ADMIN_UIDS in Render." });
+  return res.json({
+    admin: true,
+    providerConfigured: Boolean(HETZNER_API_TOKEN),
+    provisioningEnabled: VPS_PROVISIONING_ENABLED && Boolean(HETZNER_API_TOKEN)
+  });
+});
+\napp.get("/api/admin/vps/servers", async (req, res) => {
   res.set("Access-Control-Allow-Origin", allowedFrontendOrigin);
   res.set("Vary", "Origin");
   res.set("Cache-Control", "no-store");
